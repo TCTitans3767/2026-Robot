@@ -6,7 +6,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
+<<<<<<< HEAD
 import frc.robot.util.GenericNTButton;
+=======
+import frc.robot.utils.GenericNTButton;
+>>>>>>> origin/main
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
