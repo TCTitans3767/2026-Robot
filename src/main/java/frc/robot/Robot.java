@@ -215,6 +215,8 @@ public class Robot extends LoggedRobot {
 
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+//    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
+//    shooterArray.setTarget(Constants.FieldPoses.blueHub);
   }
 
   /** This function is called periodically during all modes. */

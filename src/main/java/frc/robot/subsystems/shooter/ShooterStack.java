@@ -45,6 +45,7 @@ public class ShooterStack extends SubsystemBase {
     @Override
     public void periodic() {
         currentShooterPosition = drivetrain.getPose().plus(new Transform2d(robotRelativeOffset.getTranslation(), robotRelativeOffset.getRotation()));
+//        Logger.recordOutput(name+"position", currentShooterPosition);
         distanceToTarget = currentShooterPosition.getTranslation().getDistance(shotTarget);
 
         turret.setRotation(calculateTurretRotation());
@@ -79,7 +80,7 @@ public class ShooterStack extends SubsystemBase {
     }
 
     private double calculateTurretRotation() {
-        return Math.atan2(
+        return drivetrain.getRotation().getRadians() - Math.atan2(
                 shotTarget.getY() - currentShooterPosition.getY(),
                 shotTarget.getX() - currentShooterPosition.getX()
                 );

@@ -20,6 +20,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void setRotation(double targetRotation) {
+//        Logger.recordOutput(name+"rotation Target", targetRotation);
         io.setRotation(targetRotation);
     }
 
