@@ -13,6 +13,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.InterpolatingMatrixTreeMap;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -36,5 +40,19 @@ public final class Constants {
 
     /** Replaying from a log file. */
     REPLAY
+  }
+
+  public static class FieldPoses {
+      public static final Translation2d blueHub = new Translation2d(4.629, 4.014);
+      public static final Translation2d redHub = new Translation2d(11.943, 4.014);
+  }
+
+  public static class Shooter {
+      public static final InterpolatingDoubleTreeMap hoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
+      public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
+
+      static {
+        hoodAngleInterpolationMap.put(1.0, 4.0);
+      }
   }
 }

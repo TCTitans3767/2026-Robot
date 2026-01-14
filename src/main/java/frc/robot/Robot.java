@@ -16,6 +16,8 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +25,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.robotControl.RobotControl;
-import frc.robot.subsystems.robotControl.RobotControlIO;
+import frc.robot.subsystems.shooter.ShooterArray;
+import frc.robot.subsystems.shooter.ShooterStack;
+import frc.robot.subsystems.shooter.feeder.Feeder;
+import frc.robot.subsystems.shooter.feeder.FeederIO;
+import frc.robot.subsystems.shooter.flywheel.Flywheel;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
+import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.HoodIO;
+import frc.robot.subsystems.shooter.turret.Turret;
+import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.utils.DriveModes;
 import frc.robot.utils.RobotStates;
 import frc.robot.utils.RobotTransitions;
@@ -42,9 +53,10 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-  private RobotContainer robotContainer;
+  private final RobotContainer robotContainer;
 
   public static Drivetrain drivetrain;
+  public static ShooterArray shooterArray = new ShooterArray();
 
   public static final XboxController driverController = new XboxController(Constants.DriverController.PORT);
 
@@ -118,6 +130,22 @@ public class Robot extends LoggedRobot {
                               new ModuleIOTalonFX(TunerConstants.FrontRight),
                               new ModuleIOTalonFX(TunerConstants.BackLeft),
                               new ModuleIOTalonFX(TunerConstants.BackRight));
+              shooterArray.addShooter(new ShooterStack(
+                      "LeftShooterStack",
+                      new Turret("leftTurret", new TurretIO() {}),
+                      new Hood("leftHood", new HoodIO() {}),
+                      new Flywheel("leftFlywheel", new FlywheelIO() {}),
+                      new Feeder("leftFeeder", new FeederIO() {}),
+                      new Pose2d()
+              ));
+              shooterArray.addShooter(new ShooterStack(
+                      "RightShooterStack",
+                      new Turret("rightTurret", new TurretIO() {}),
+                      new Hood("rightHood", new HoodIO() {}),
+                      new Flywheel("rightFlywheel", new FlywheelIO() {}),
+                      new Feeder("rightFeeder", new FeederIO() {}),
+                      new Pose2d()
+              ));
               break;
 
           case SIM:
@@ -129,6 +157,22 @@ public class Robot extends LoggedRobot {
                               new ModuleIOSim(TunerConstants.FrontRight),
                               new ModuleIOSim(TunerConstants.BackLeft),
                               new ModuleIOSim(TunerConstants.BackRight));
+              shooterArray.addShooter(new ShooterStack(
+                      "LeftShooterStack",
+                      new Turret("leftTurret", new TurretIO() {}),
+                      new Hood("leftHood", new HoodIO() {}),
+                      new Flywheel("leftFlywheel", new FlywheelIO() {}),
+                      new Feeder("leftFeeder", new FeederIO() {}),
+                      new Pose2d()
+              ));
+              shooterArray.addShooter(new ShooterStack(
+                      "RightShooterStack",
+                      new Turret("rightTurret", new TurretIO() {}),
+                      new Hood("rightHood", new HoodIO() {}),
+                      new Flywheel("rightFlywheel", new FlywheelIO() {}),
+                      new Feeder("rightFeeder", new FeederIO() {}),
+                      new Pose2d()
+              ));
               break;
 
           default:
@@ -140,6 +184,22 @@ public class Robot extends LoggedRobot {
                               new ModuleIO() {},
                               new ModuleIO() {},
                               new ModuleIO() {});
+              shooterArray.addShooter(new ShooterStack(
+                      "LeftShooterStack",
+                      new Turret("leftTurret", new TurretIO() {}),
+                      new Hood("leftHood", new HoodIO() {}),
+                      new Flywheel("leftFlywheel", new FlywheelIO() {}),
+                      new Feeder("leftFeeder", new FeederIO() {}),
+                      new Pose2d()
+              ));
+              shooterArray.addShooter(new ShooterStack(
+                      "RightShooterStack",
+                      new Turret("rightTurret", new TurretIO() {}),
+                      new Hood("rightHood", new HoodIO() {}),
+                      new Flywheel("rightFlywheel", new FlywheelIO() {}),
+                      new Feeder("rightFeeder", new FeederIO() {}),
+                      new Pose2d()
+              ));
               break;
     }
 
@@ -155,6 +215,8 @@ public class Robot extends LoggedRobot {
 
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+//    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
+//    shooterArray.setTarget(Constants.FieldPoses.blueHub);
   }
 
   /** This function is called periodically during all modes. */
