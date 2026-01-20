@@ -81,7 +81,12 @@ public final class Constants {
           public static final double simI = 0;
           public static final double simD = 0.0;
           public static final double simS = 8;
-
+      }
+      public static class Feeder{
+          public static final double simP = 6;
+          public static final double simI = 0;
+          public static final double simD = 0.0;
+          public static final double simS = 0.0;
       }
   }
 }

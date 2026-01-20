@@ -6,14 +6,15 @@ public interface FeederIO {
 
     @AutoLog
     public static class FeederIOInputs {
-        public double currentSpeed;
+        public double currentVelocity;
         public double currentAmperage;
-        public double targetSpeed;
+        public double currentTorque;
+        public double targetVelocity;
     }
 
     public default void updateInputs(FeederIOInputs inputs) {};
 
     public default void setFeedSpeed(double speed) {};
 
-    public default void setFeedVelocity(double velocity) {};
+    public default void setVelocity(double velocity) {};
 }

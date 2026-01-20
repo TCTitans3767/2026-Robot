@@ -30,6 +30,7 @@ import frc.robot.subsystems.shooter.ShooterArray;
 import frc.robot.subsystems.shooter.ShooterStack;
 import frc.robot.subsystems.shooter.feeder.Feeder;
 import frc.robot.subsystems.shooter.feeder.FeederIO;
+import frc.robot.subsystems.shooter.feeder.FeederIOSim;
 import frc.robot.subsystems.shooter.flywheel.Flywheel;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOSim;
@@ -174,7 +175,7 @@ public class Robot extends LoggedRobot {
                       new Turret("leftTurret", new TurretIOSim()),
                       new Hood("leftHood", new HoodIOSim()),
                       new Flywheel("leftFlywheel", new FlywheelIOSim()),
-                      new Feeder("leftFeeder", new FeederIO() {}),
+                      new Feeder("leftFeeder", new FeederIOSim()),
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(8), new Rotation2d())
               ));
               shooterArray.addShooter(new ShooterStack(
@@ -182,7 +183,7 @@ public class Robot extends LoggedRobot {
                       new Turret("rightTurret", new TurretIOSim()),
                       new Hood("rightHood", new HoodIOSim()),
                       new Flywheel("rightFlywheel", new FlywheelIOSim()),
-                      new Feeder("rightFeeder", new FeederIO() {}),
+                      new Feeder("rightFeeder", new FeederIOSim()),
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(-8), new Rotation2d())
               ));
               break;
