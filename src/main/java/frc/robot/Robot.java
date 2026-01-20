@@ -160,7 +160,7 @@ public class Robot extends LoggedRobot {
           case SIM:
               // Sim robot, instantiate physics sim IO implementations
 
-            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(2, 3, new Rotation2d()));
+            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(2, 2, new Rotation2d()));
             SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
               drivetrain =
                       new Drivetrain(
@@ -313,10 +313,10 @@ public class Robot extends LoggedRobot {
     SimulatedArena.getInstance().simulationPeriodic();
     Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
     Logger.recordOutput("FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
-    driveSimulation.setAngularVelocity(Units.degreesToRadians(15));
+//    driveSimulation.setAngularVelocity(Units.degreesToRadians(15));
 
     if (drivetrain.getPose().getY() < 7.3) {
-      driveSimulation.setLinearVelocity(0, 0.3);
+      driveSimulation.setLinearVelocity(0, 0.5);
     }
   }
 

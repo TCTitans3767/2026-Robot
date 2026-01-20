@@ -58,13 +58,13 @@ public class ShooterStack {
         Logger.recordOutput(name + " Distance To Target", distanceToTarget);
         double targetTurretRotation = calculateTurretRotation();
 
-        turret.setRotation(targetTurretRotation);
+        turret.setRotation(targetTurretRotation + (0.1 * calculateVelocityAwayFromTarget(targetTurretRotation - drivetrain.getRotation().getRadians())));
         hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
 
         if (shootingEnabled) {
             flywheel.setVelocity(
                     flywheelMap.get(distanceToTarget) != null ?
-                    flywheelMap.get(distanceToTarget) + calculateFlywheelVelocityCorrection(targetTurretRotation - drivetrain.getRotation().getRadians())
+                    flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection(targetTurretRotation - drivetrain.getRotation().getRadians()))
                     : 0
             );
         } else {
@@ -80,7 +80,7 @@ public class ShooterStack {
         }
 
         if (Constants.currentMode == Constants.Mode.SIM) {
-            if (simCycleCount >= 20) {
+            if (simCycleCount >= 30) {
                 shootSimFuel();
                 simCycleCount = 0;
             } else {
@@ -114,7 +114,14 @@ public class ShooterStack {
         double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
         double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
-        return (Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter;
+        return ((Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter);
+    }
+
+    private double calculateVelocityAwayFromTarget(double angleToTarget) {
+        double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
+        double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
+
+        return (Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity)));
     }
 
     public void setTurretAngle(double angle) {

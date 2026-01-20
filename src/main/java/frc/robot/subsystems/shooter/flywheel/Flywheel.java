@@ -34,8 +34,8 @@ public class Flywheel extends SubsystemBase {
         }
     }
 
-    public void setVelocity(double radiansPerSecond) {
-        io.setVelocity(radiansPerSecond);
+    public void setVelocity(double rotationsPerSecond) {
+        io.setVelocity(rotationsPerSecond);
     }
 
     public void setPower(double percent) {
