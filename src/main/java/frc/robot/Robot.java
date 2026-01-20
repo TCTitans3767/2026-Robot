@@ -40,7 +40,6 @@ import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
-import frc.robot.util.DrivetrainPublisher;
 import frc.robot.utils.DriveModes;
 import frc.robot.utils.RobotStates;
 import frc.robot.utils.RobotTransitions;
@@ -161,7 +160,7 @@ public class Robot extends LoggedRobot {
           case SIM:
               // Sim robot, instantiate physics sim IO implementations
 
-            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
+            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(2, 3, new Rotation2d()));
             SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
               drivetrain =
                       new Drivetrain(
@@ -186,6 +185,9 @@ public class Robot extends LoggedRobot {
                       new Feeder("rightFeeder", new FeederIOSim()),
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(-8), new Rotation2d())
               ));
+
+              shooterArray.setTarget(Constants.FieldPoses.blueHub);
+              shooterArray.setInterpolationMaps(Constants.Shooter.simHoodAngleInterpolationMap, Constants.Shooter.simFlywheelVelocityInterpolationMap);
               break;
 
           default:
@@ -229,8 +231,6 @@ public class Robot extends LoggedRobot {
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
-    shooterArray.setTarget(Constants.FieldPoses.blueHub);
-    shooterArray.setInterpolationMaps(Constants.Shooter.hoodAngleInterpolationMap, Constants.Shooter.flywheelVelocityInterpolationMap);
   }
 
   /** This function is called periodically during all modes. */
@@ -314,6 +314,10 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
     Logger.recordOutput("FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
     driveSimulation.setAngularVelocity(Units.degreesToRadians(15));
+
+    if (drivetrain.getPose().getY() < 7.3) {
+      driveSimulation.setLinearVelocity(0, 0.3);
+    }
   }
 
     public static DriverStation.Alliance getAlliance() {

@@ -13,10 +13,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.InterpolatingMatrixTreeMap;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -51,13 +50,20 @@ public final class Constants {
   }
 
   public static class Shooter {
+      public static final InterpolatingDoubleTreeMap simHoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
+      public static final InterpolatingDoubleTreeMap simFlywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap hoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
 
       static {
-        hoodAngleInterpolationMap.put(1.0, 4.0);
-        flywheelVelocityInterpolationMap.put(1.0, 68.0);
+        simHoodAngleInterpolationMap.put(1.635, Units.degreesToRadians(78));
+        simHoodAngleInterpolationMap.put(4.5, Units.degreesToRadians(72));
+
+        simFlywheelVelocityInterpolationMap.put(1.635, 38.0);
+        simFlywheelVelocityInterpolationMap.put(2.0, 43.0);
+        simFlywheelVelocityInterpolationMap.put(3.0, 48.0);
+        simFlywheelVelocityInterpolationMap.put(4.5, 50.0);
       }
 
       // meters

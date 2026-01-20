@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -11,8 +13,12 @@ import frc.robot.subsystems.shooter.feeder.Feeder;
 import frc.robot.subsystems.shooter.flywheel.Flywheel;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.turret.Turret;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import static edu.wpi.first.units.Units.*;
 
 public class ShooterStack {
     private final Drivetrain drivetrain = Robot.drivetrain;
@@ -34,6 +40,8 @@ public class ShooterStack {
 
     private double idleVelocity = 2000;
 
+    private int simCycleCount = 0;
+
     public ShooterStack(String name, Turret turret, Hood hood, Flywheel flywheel, Feeder feeder, Pose2d robotRelativeOffset) {
         this.robotRelativeOffset = robotRelativeOffset;
         this.turret = turret;
@@ -47,6 +55,7 @@ public class ShooterStack {
         currentShooterPosition = drivetrain.getPose().plus(new Transform2d(robotRelativeOffset.getTranslation(), robotRelativeOffset.getRotation()));
         Logger.recordOutput(name+" Turret Position", new Pose2d(currentShooterPosition.getX(), currentShooterPosition.getY(), Rotation2d.fromRadians(turret.getRotationFieldCoordinates())));
         distanceToTarget = currentShooterPosition.getTranslation().getDistance(shotTarget);
+        Logger.recordOutput(name + " Distance To Target", distanceToTarget);
         double targetTurretRotation = calculateTurretRotation();
 
         turret.setRotation(targetTurretRotation);
@@ -68,6 +77,15 @@ public class ShooterStack {
             feeder.setFeedVelocity(30);
         } else {
             feeder.setFeedVelocity(0);
+        }
+
+        if (Constants.currentMode == Constants.Mode.SIM) {
+            if (simCycleCount >= 20) {
+                shootSimFuel();
+                simCycleCount = 0;
+            } else {
+                simCycleCount++;
+            }
         }
     }
 
@@ -93,8 +111,8 @@ public class ShooterStack {
     }
 
     private double calculateFlywheelVelocityCorrection(double angleToTarget) {
-        double xVelocity = drivetrain.getChassisSpeeds().vxMetersPerSecond;
-        double yVelocity = drivetrain.getChassisSpeeds().vyMetersPerSecond;
+        double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
+        double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
         return (Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter;
     }
@@ -117,5 +135,17 @@ public class ShooterStack {
 
     public String getShooterName() {
         return name;
+    }
+
+    private void shootSimFuel() {
+        SimulatedArena.getInstance().addGamePieceProjectile(new RebuiltFuelOnFly(
+                this.currentShooterPosition.getTranslation(),
+                new Translation2d(),
+                ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()),
+                Rotation2d.fromRadians(turret.getRotationFieldCoordinates()),
+                Inches.of(20),
+                MetersPerSecond.of(Units.rotationsToRadians(flywheel.getVelocity()) * Constants.Shooter.flywheelDiameter * 0.3),
+                Radians.of(hood.getAngle())
+        ));
     }
 }
