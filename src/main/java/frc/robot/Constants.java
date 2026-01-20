@@ -57,6 +57,7 @@ public final class Constants {
 
       static {
         hoodAngleInterpolationMap.put(1.0, 4.0);
+        flywheelVelocityInterpolationMap.put(1.0, 4500.0);
       }
 
       // meters
@@ -69,6 +70,11 @@ public final class Constants {
 
           public static final double leftLimit = Math.PI;
           public static final double rightLimit = -Math.PI;
+      }
+      public static class Hood {
+          public static final double simP = 0.5;
+          public static final double simI = 0;
+          public static final double simD = 0.05;
       }
   }
 }

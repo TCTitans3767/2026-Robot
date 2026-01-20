@@ -34,6 +34,7 @@ import frc.robot.subsystems.shooter.flywheel.Flywheel;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.hood.HoodIO;
+import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
@@ -170,7 +171,7 @@ public class Robot extends LoggedRobot {
               shooterArray.addShooter(new ShooterStack(
                       "LeftShooterStack",
                       new Turret("leftTurret", new TurretIOSim()),
-                      new Hood("leftHood", new HoodIO() {}),
+                      new Hood("leftHood", new HoodIOSim()),
                       new Flywheel("leftFlywheel", new FlywheelIO() {}),
                       new Feeder("leftFeeder", new FeederIO() {}),
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(8), new Rotation2d())
@@ -178,7 +179,7 @@ public class Robot extends LoggedRobot {
               shooterArray.addShooter(new ShooterStack(
                       "RightShooterStack",
                       new Turret("rightTurret", new TurretIOSim()),
-                      new Hood("rightHood", new HoodIO() {}),
+                      new Hood("rightHood", new HoodIOSim()),
                       new Flywheel("rightFlywheel", new FlywheelIO() {}),
                       new Feeder("rightFeeder", new FeederIO() {}),
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(-8), new Rotation2d())
@@ -227,6 +228,7 @@ public class Robot extends LoggedRobot {
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
     shooterArray.setTarget(Constants.FieldPoses.blueHub);
+    shooterArray.setInterpolationMaps(Constants.Shooter.hoodAngleInterpolationMap, Constants.Shooter.flywheelVelocityInterpolationMap);
   }
 
   /** This function is called periodically during all modes. */

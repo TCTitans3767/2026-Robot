@@ -23,7 +23,7 @@ public class ShooterStack {
     private final Pose2d robotRelativeOffset;
     private final String name;
 
-    private boolean shootingEnabled;
+    private boolean shootingEnabled = true;
 
     private Translation2d shotTarget = new Translation2d();
     private double distanceToTarget = 0;
