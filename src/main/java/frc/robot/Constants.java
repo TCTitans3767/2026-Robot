@@ -55,6 +55,7 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap hoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
+      public static double signalUpdateFrequency = 50;
 
       static {
         simHoodAngleInterpolationMap.put(1.635, Units.degreesToRadians(78));
@@ -76,6 +77,15 @@ public final class Constants {
 
           public static final double leftLimit = Math.PI;
           public static final double rightLimit = -Math.PI;
+          public static double currentLimit = 60;
+
+          public static double motionMagicCruise = 100;
+          public static double motionMagicAccel = 50;
+
+          public static final double compP = 0;
+          public static final double compI = 0;
+          public static final double compD = 0;
+          public static final double compS = 0;
       }
       public static class Hood {
           public static final double simP = 0.5;
