@@ -120,6 +120,17 @@ public final class Constants {
           public static final double simI = 0;
           public static final double simD = 0.0;
           public static final double simS = 0.0;
+
+          public static double motionMagicCruise = 100;
+          public static double motionMagicAccel = 50;
+
+          public static final double compP = 0;
+          public static final double compI = 0;
+          public static final double compD = 0;
+          public static final double compS = 0;
+
+          public static final double gearRatio = 1;
+          public static double currentLimit = 60;
       }
   }
 }
