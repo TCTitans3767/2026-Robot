@@ -45,6 +45,7 @@ public class TurretIOCompetition implements TurretIO{
         turretMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         turretMotorConfig.CurrentLimits.StatorCurrentLimit = Constants.Shooter.Turret.currentLimit;
+        turretMotorConfig.Feedback.RotorToSensorRatio = Constants.Shooter.Turret.gearRatio;
 
         motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Shooter.Turret.motionMagicCruise;
         motionMagicConfigs.MotionMagicAcceleration = Constants.Shooter.Turret.motionMagicAccel;

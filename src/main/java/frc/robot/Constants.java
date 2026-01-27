@@ -41,6 +41,7 @@ public final class Constants {
     REPLAY
   }
 
+  public static final int ServoHubCANID = 1;
 
   public static final double loopPeriodSecs = 0.02;
 
@@ -86,11 +87,16 @@ public final class Constants {
           public static final double compI = 0;
           public static final double compD = 0;
           public static final double compS = 0;
+
+          public static final double gearRatio = 1;
       }
       public static class Hood {
           public static final double simP = 0.5;
           public static final double simI = 0;
           public static final double simD = 0.05;
+
+          public static final int minimumPulseWidth = 1000;
+          public static final int maximumPulseWidth = 2000;
       }
       public static class Flywheel{
           public static final double simP = 10.5;
