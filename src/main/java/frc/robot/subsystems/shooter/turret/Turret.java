@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter.turret;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
@@ -20,9 +21,9 @@ public class Turret extends SubsystemBase {
         Logger.processInputs(name, inputs);
     }
 
-    public void setRotation(double targetRotation) {
+    public void setRotation(double targetRotationRads) {
 //        Logger.recordOutput(name+"rotation Target", targetRotation);
-        io.setRotation(targetRotation);
+        io.setRotation(targetRotationRads);
     }
 
     public void setPower(double percentage) {

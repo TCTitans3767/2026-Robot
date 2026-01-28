@@ -93,6 +93,12 @@ public final class Constants {
 
           // radians per second
           public static final double velocityLimit = 5;
+
+          public static final double GEAR_0_TOOTH_COUNT = 110;
+          public static final double GEAR_1_TOOTH_COUNT = 25;
+          public static final double GEAR_2_TOOTH_COUNT = 24.0;
+          public static final double SLOPE = (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
+                  / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
       }
       public static class Hood {
           public static final double simP = 0.5;
