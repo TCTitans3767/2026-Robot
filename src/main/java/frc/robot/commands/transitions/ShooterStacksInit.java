@@ -1,0 +1,22 @@
+package frc.robot.commands.transitions;
+
+import ControlAnnotations.Transition;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
+import frc.robot.commands.SetMode;
+import frc.robot.utils.RobotTransitions;
+
+@Transition
+public class ShooterStacksInit extends SequentialCommandGroup {
+
+    public ShooterStacksInit() {
+        addCommands(
+                Robot.shooterArray.homeTurrets()
+        );
+    }
+
+    @Override
+    public boolean runsWhenDisabled() {
+        return true;
+    }
+}

@@ -166,7 +166,7 @@ public class Robot extends LoggedRobot {
           case SIM:
               // Sim robot, instantiate physics sim IO implementations
 
-            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(2, 2, new Rotation2d()));
+            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(1, 0.5, new Rotation2d()));
             SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
               drivetrain =
                       new Drivetrain(
@@ -192,7 +192,7 @@ public class Robot extends LoggedRobot {
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(-8), new Rotation2d())
               ));
 
-              shooterArray.setTarget(Constants.FieldPoses.blueHub);
+//              shooterArray.setTarget(Constants.FieldPoses.blueHub);
               shooterArray.setInterpolationMaps(Constants.Shooter.simHoodAngleInterpolationMap, Constants.Shooter.simFlywheelVelocityInterpolationMap);
               break;
 
@@ -236,6 +236,7 @@ public class Robot extends LoggedRobot {
 
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }
 
@@ -320,10 +321,10 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
     Logger.recordOutput("FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
 //    driveSimulation.setAngularVelocity(Units.degreesToRadians(15));
-
-    if (drivetrain.getPose().getY() < 7.3) {
-      driveSimulation.setLinearVelocity(0, 0.5);
-    }
+//
+//    if (drivetrain.getPose().getY() < 7.3) {
+//      driveSimulation.setLinearVelocity(0.2, 0.5);
+//    }
   }
 
     public static DriverStation.Alliance getAlliance() {

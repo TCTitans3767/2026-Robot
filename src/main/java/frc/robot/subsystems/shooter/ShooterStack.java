@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.commands.basicCommands.HomeTurretCommand;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.shooter.feeder.Feeder;
 import frc.robot.subsystems.shooter.flywheel.Flywheel;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.turret.Turret;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
@@ -28,7 +30,7 @@ public class ShooterStack {
     private final Pose2d robotRelativeOffset;
     private final String name;
 
-    private boolean shootingEnabled = true;
+    private boolean shootingEnabled = false;
 
     private Translation2d shotTarget = new Translation2d();
     private double distanceToTarget = 0;
@@ -40,6 +42,8 @@ public class ShooterStack {
     private double idleVelocity = 2000;
 
     private int simCycleCount = 0;
+
+    private boolean pointToTarget = false;
 
     public ShooterStack(String name, Turret turret, Hood hood, Flywheel flywheel, Feeder feeder, Pose2d robotRelativeOffset) {
         this.robotRelativeOffset = robotRelativeOffset;
@@ -59,7 +63,9 @@ public class ShooterStack {
         double angleToTarget = targetTurretRotation - drivetrain.getRotation().getRadians();
 
 
-        turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
+        if (pointToTarget) {
+            turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
+        }
         hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
 
         if (shootingEnabled) {
@@ -86,7 +92,7 @@ public class ShooterStack {
         }
 
         if (Constants.currentMode == Constants.Mode.SIM) {
-            if (simCycleCount >= 30) {
+            if (simCycleCount >= 30 && shootingEnabled) {
                 shootSimFuel();
                 simCycleCount = 0;
             } else {
@@ -120,14 +126,18 @@ public class ShooterStack {
         double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
         double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
-        return ((Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter);
+        double correction = Units.radiansToRotations(-((Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter));
+
+        Logger.recordOutput(name + "flywheel velocity correction", correction);
+
+        return correction;
     }
 
     private double calculateTurretLeadCorrection(double angleToTarget) {
         double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
         double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
-        return Math.sin(Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) * Constants.Shooter.turretLeadCorrectionConstant;
+        return -Math.sin(Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) * Constants.Shooter.turretLeadCorrectionConstant;
     }
 
     public void setTurretAngle(double angle) {
@@ -160,5 +170,16 @@ public class ShooterStack {
                 MetersPerSecond.of(Units.rotationsToRadians(flywheel.getVelocity()) * Constants.Shooter.flywheelDiameter * 0.3),
                 Radians.of(hood.getAngle())
         ));
+    }
+
+    public void enablePointToTarget() {
+        this.pointToTarget = true;
+    }
+    public void disablePointToTarget() {
+        this.pointToTarget = false;
+    }
+
+    public Command homeTurretCommand() {
+        return new HomeTurretCommand(this.turret);
     }
 }

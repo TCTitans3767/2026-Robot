@@ -57,14 +57,14 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
       public static double signalUpdateFrequency = 50;
-      public static double turretLeadCorrectionConstant = 0.1;
+      public static double turretLeadCorrectionConstant = 0.05;
 
       static {
         simHoodAngleInterpolationMap.put(1.635, Units.degreesToRadians(78));
         simHoodAngleInterpolationMap.put(4.5, Units.degreesToRadians(72));
 
         simFlywheelVelocityInterpolationMap.put(1.635, 38.0);
-        simFlywheelVelocityInterpolationMap.put(2.0, 43.0);
+        simFlywheelVelocityInterpolationMap.put(2.0, 42.0);
         simFlywheelVelocityInterpolationMap.put(3.0, 48.0);
         simFlywheelVelocityInterpolationMap.put(4.5, 50.0);
       }
@@ -89,7 +89,7 @@ public final class Constants {
           public static final double compD = 0;
           public static final double compS = 0;
 
-          public static final double gearRatio = 1;
+          public static final double gearRatio = 18.75;
 
           // radians per second
           public static final double velocityLimit = 5;

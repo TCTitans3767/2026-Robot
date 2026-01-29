@@ -14,6 +14,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
@@ -48,7 +49,7 @@ public class TurretIOCompetition implements TurretIO{
         turretMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         turretMotorConfig.CurrentLimits.StatorCurrentLimit = Constants.Shooter.Turret.currentLimit;
-        turretMotorConfig.Feedback.RotorToSensorRatio = Constants.Shooter.Turret.gearRatio;
+        turretMotorConfig.Feedback.SensorToMechanismRatio = Constants.Shooter.Turret.gearRatio;
 
         motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Shooter.Turret.motionMagicCruise;
         motionMagicConfigs.MotionMagicAcceleration = Constants.Shooter.Turret.motionMagicAccel;
@@ -79,7 +80,7 @@ public class TurretIOCompetition implements TurretIO{
         }
 
         inputs.targetRotation = this.targetRotation;
-        inputs.currentRotation = rotationStatusSignal.getValueAsDouble();
+        inputs.currentRotation = Units.rotationsToDegrees(rotationStatusSignal.getValueAsDouble());
         inputs.currentAmperage = amperageStatusSignal.getValueAsDouble();
         inputs.currentTorque = torqueStatusSignal.getValueAsDouble();
         inputs.currentVelocity = velocityStatusSignal.getValueAsDouble();
@@ -139,4 +140,10 @@ public class TurretIOCompetition implements TurretIO{
         }
         lastTurretAngle = turretAngle;
         return turretAngle;
-    }}
+    }
+
+    @Override
+    public void resetEncoder(double rotations) {
+        turretMotor.setPosition(rotations);
+    }
+}

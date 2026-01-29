@@ -23,7 +23,7 @@ public class HoodIOSim implements HoodIO{
         sim.setInputVoltage(MathUtil.clamp(pid.calculate(sim.getAngularPositionRad()), -12, 12));
         sim.update(Constants.loopPeriodSecs);
 
-//        inputs.currentAngle = -sim.getAngularPositionRad();
+        inputs.currentAngle = -sim.getAngularPositionRad();
 //        inputs.currentAmperage = sim.getCurrentDrawAmps();
 //        inputs.currentTorque = sim.getTorqueNewtonMeters();
         inputs.targetAngle = -this.angleTarget;

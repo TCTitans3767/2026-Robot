@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter.turret;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -8,7 +9,7 @@ import org.littletonrobotics.junction.Logger;
 public class Turret extends SubsystemBase {
     private final TurretIOInputsAutoLogged inputs = new TurretIOInputsAutoLogged();
     private final TurretIO io;
-    private final String name;
+    public final String name;
 
     public Turret(String name, TurretIO io) {
         this.io = io;
@@ -40,5 +41,9 @@ public class Turret extends SubsystemBase {
 
     public double getVelocity() {
         return inputs.currentVelocity;
+    }
+
+    public void resetEncoder(double degrees) {
+        io.resetEncoder(Units.degreesToRotations(degrees));
     }
 }
