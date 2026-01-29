@@ -2,6 +2,9 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.ArrayList;
@@ -43,6 +46,32 @@ public class ShooterArray extends SubsystemBase{
         shooterStacks.forEach((shooterStackName, shooterStack) -> {
             shooterStack.enableShooting(shootingEnabled);
         });
+    }
+
+    public void disableTragetPointing() {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.disablePointToTarget();
+        });
+    }
+    public void enableTragetPointing() {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.enablePointToTarget();
+        });
+    }
+
+    public Command homeTurrets() {
+        ParallelCommandGroup homeAllTurretsCommand = new ParallelCommandGroup() {
+            @Override
+            public boolean runsWhenDisabled() {
+                return true;
+            }
+        };
+
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            homeAllTurretsCommand.addCommands(shooterStack.homeTurretCommand());
+        });
+
+        return homeAllTurretsCommand;
     }
 
 }

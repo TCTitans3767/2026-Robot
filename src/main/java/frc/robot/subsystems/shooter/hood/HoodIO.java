@@ -8,8 +8,7 @@ public interface HoodIO {
     public static class HoodIOInputs {
         public double currentAngle;
         public double targetAngle;
-        public double currentAmperage;
-        public double currentTorque;
+        public double commandedPulseWidth;
     }
 
     public default void updateInputs(HoodIOInputs inputs) {};

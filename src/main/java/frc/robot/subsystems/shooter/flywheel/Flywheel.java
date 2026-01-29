@@ -1,8 +1,6 @@
 package frc.robot.subsystems.shooter.flywheel;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
@@ -43,7 +41,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return inputs.currentVelocity;
+        return inputs.currentVelocityRPS;
     }
 
     public double getTargetVelocity() {
