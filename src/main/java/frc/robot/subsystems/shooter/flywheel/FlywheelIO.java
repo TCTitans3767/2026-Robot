@@ -7,9 +7,10 @@ public interface FlywheelIO {
     @AutoLog
     public static class FlywheelIOInputs {
         public double targetVelocity;
-        public double currentVelocity;
+        public double currentVelocityRPS;
         public double currentTorque;
         public double currentAmperage;
+        public double currentVelocityRPM;
     }
 
     public default void updateInputs(FlywheelIOInputs inputs) {};

@@ -7,10 +7,12 @@ public interface TurretIO {
 
     @AutoLog
     public static class TurretIOInputs {
-        public double targetRotation;
+        public double targetPower = 0;
+        public double targetRotation = 0;
         public boolean atLeftLimit = false;
         public boolean atRightLimit = false;
-        public double currentRotation;
+        public double currentRotation = 0;
+        public double currentVelocity = 0;
         public double currentAmperage;
         public double currentTorque;
     }
@@ -20,4 +22,6 @@ public interface TurretIO {
     public default void setRotation(double targetRotation) {};
 
     public default void setPower(double percentage) {};
+
+    public default void resetEncoder(double rotations) {};
 }

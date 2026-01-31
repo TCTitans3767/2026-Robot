@@ -16,6 +16,7 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+import com.revrobotics.servohub.ServoHub;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -64,6 +65,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private final RobotContainer robotContainer;
+
+  public static ServoHub servoHub;
 
   public static Drivetrain drivetrain;
   public static ShooterArray shooterArray = new ShooterArray();
@@ -136,6 +139,9 @@ public class Robot extends LoggedRobot {
     switch (Constants.currentMode) {
           case REAL:
               // Real robot, instantiate hardware IO implementations
+
+              servoHub = new ServoHub(Constants.ServoHubCANID);
+
               drivetrain =
                       new Drivetrain(
                               new GyroIOPigeon2(),
@@ -165,7 +171,7 @@ public class Robot extends LoggedRobot {
           case SIM:
               // Sim robot, instantiate physics sim IO implementations
 
-            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(2, 2, new Rotation2d()));
+            driveSimulation = new SwerveDriveSimulation(Drivetrain.mapleSimConfig, new Pose2d(1, 0.5, new Rotation2d()));
             SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
               drivetrain =
                       new Drivetrain(
@@ -237,6 +243,7 @@ public class Robot extends LoggedRobot {
 
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }
 
@@ -321,10 +328,10 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
     Logger.recordOutput("FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
 //    driveSimulation.setAngularVelocity(Units.degreesToRadians(15));
-
-    if (drivetrain.getPose().getY() < 7.3) {
-      driveSimulation.setLinearVelocity(0, 0.5);
-    }
+//
+//    if (drivetrain.getPose().getY() < 7.3) {
+//      driveSimulation.setLinearVelocity(0.2, 0.5);
+//    }
   }
 
     public static DriverStation.Alliance getAlliance() {

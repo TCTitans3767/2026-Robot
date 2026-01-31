@@ -27,7 +27,7 @@ public class FlywheelIOSim implements FlywheelIO{
 
         inputs.currentAmperage = sim.getCurrentDrawAmps();
         inputs.currentTorque = sim.getTorqueNewtonMeters();
-        inputs.currentVelocity = Units.radiansToRotations(sim.getAngularVelocityRadPerSec());
+        inputs.currentVelocityRPS = Units.radiansToRotations(sim.getAngularVelocityRadPerSec());
         inputs.targetVelocity = this.velocityTarget;
     }
 
