@@ -26,6 +26,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOCompetition;
 import frc.robot.subsystems.robotControl.RobotControl;
 import frc.robot.subsystems.shooter.ShooterArray;
 import frc.robot.subsystems.shooter.ShooterStack;
@@ -67,6 +70,7 @@ public class Robot extends LoggedRobot {
 
   public static Drivetrain drivetrain;
   public static ShooterArray shooterArray = new ShooterArray();
+  public static Intake intake;
 
   public static SwerveDriveSimulation driveSimulation = null;
 
@@ -161,6 +165,7 @@ public class Robot extends LoggedRobot {
                       new Feeder("rightFeeder", new FeederIO() {}),
                       new Pose2d()
               ));
+              intake = new Intake(new IntakeIOCompetition());
               break;
 
           case SIM:
@@ -192,7 +197,9 @@ public class Robot extends LoggedRobot {
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(-8), new Rotation2d())
               ));
 
-//              shooterArray.setTarget(Constants.FieldPoses.blueHub);
+              intake = new Intake(new IntakeIO() {});
+
+              shooterArray.setTarget(Constants.FieldPoses.blueHub);
               shooterArray.setInterpolationMaps(Constants.Shooter.simHoodAngleInterpolationMap, Constants.Shooter.simFlywheelVelocityInterpolationMap);
               break;
 

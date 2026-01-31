@@ -143,4 +143,31 @@ public final class Constants {
           public static double currentLimit = 60;
       }
   }
+
+  public static class Intake{
+      public static final int rollerMotorCANID = 0;
+      public static final double RollerCurrentLimit = 0.0;
+      public static final double RollerGearRatio = 0.0;
+      public static final double RollerMotionMagicCruise = 0.0;
+      public static final double RollerMotionMagicAccel = 0.0;
+      public static final double RollerkP = 0.0;
+      public static final double RollerkI = 0.0;
+      public static final double RollerkD = 0.0;
+      public static final double RollerkS = 0.0;
+      public static final double RollerkG = 0.0;
+
+      public static final int pivotMotorCANID = 0;
+      public static final double PivotCurrentLimit = 0.0;
+      public static final double PivotGearRatio = 0.0;
+      public static final double PivotMotionMagicCruise = 0.0;
+      public static final double PivotMotionMagicAccel = 0.0;
+      public static final double PivotkP = 0.0;
+      public static final double PivotkI = 0.0;
+      public static final double PivotkD = 0.0;
+      public static final double PivotkS = 0.0;
+      public static final double PivotkG = 0.0;
+
+      public static final double FrequencyUpdateRate = 0.0;
+    }
+
 }
