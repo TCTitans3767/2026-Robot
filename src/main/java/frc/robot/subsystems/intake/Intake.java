@@ -9,17 +9,15 @@ public class Intake extends SubsystemBase {
 
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     private final IntakeIO io;
-    private final String name;
 
-    public Intake(String name, IntakeIO io) {
+    public Intake(IntakeIO io) {
         this.io = io;
-        this.name = name;
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs(name, inputs);
+        Logger.processInputs("Intake", inputs);
     }
 
     public void setPivotSpeed(double speed) {
