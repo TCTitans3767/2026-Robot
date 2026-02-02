@@ -41,6 +41,7 @@ public final class Constants {
     REPLAY
   }
 
+  public static final int ServoHubCANID = 1;
 
   public static final double loopPeriodSecs = 0.02;
 
@@ -55,13 +56,15 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap hoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
+      public static double signalUpdateFrequency = 50;
+      public static double turretLeadCorrectionConstant = 0.05;
 
       static {
         simHoodAngleInterpolationMap.put(1.635, Units.degreesToRadians(78));
         simHoodAngleInterpolationMap.put(4.5, Units.degreesToRadians(72));
 
         simFlywheelVelocityInterpolationMap.put(1.635, 38.0);
-        simFlywheelVelocityInterpolationMap.put(2.0, 43.0);
+        simFlywheelVelocityInterpolationMap.put(2.0, 42.0);
         simFlywheelVelocityInterpolationMap.put(3.0, 48.0);
         simFlywheelVelocityInterpolationMap.put(4.5, 50.0);
       }
@@ -76,23 +79,68 @@ public final class Constants {
 
           public static final double leftLimit = Math.PI;
           public static final double rightLimit = -Math.PI;
+          public static double currentLimit = 60;
+
+          public static double motionMagicCruise = 100;
+          public static double motionMagicAccel = 50;
+
+          public static final double compP = 0;
+          public static final double compI = 0;
+          public static final double compD = 0;
+          public static final double compS = 0;
+
+          public static final double gearRatio = 18.75;
+
+          // radians per second
+          public static final double velocityLimit = 5;
+
+          public static final double GEAR_0_TOOTH_COUNT = 110;
+          public static final double GEAR_1_TOOTH_COUNT = 25;
+          public static final double GEAR_2_TOOTH_COUNT = 24.0;
+          public static final double SLOPE = (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
+                  / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
       }
       public static class Hood {
           public static final double simP = 0.5;
           public static final double simI = 0;
           public static final double simD = 0.05;
+
+          public static final int minimumPulseWidth = 1000;
+          public static final int maximumPulseWidth = 2000;
       }
       public static class Flywheel{
           public static final double simP = 10.5;
           public static final double simI = 0;
           public static final double simD = 0.0;
           public static final double simS = 8;
+
+          public static double motionMagicCruise = 100;
+          public static double motionMagicAccel = 50;
+
+          public static final double compP = 0;
+          public static final double compI = 0;
+          public static final double compD = 0;
+          public static final double compS = 0;
+
+          public static final double gearRatio = 1;
+          public static double currentLimit = 60;
       }
       public static class Feeder{
           public static final double simP = 6;
           public static final double simI = 0;
           public static final double simD = 0.0;
           public static final double simS = 0.0;
+
+          public static double motionMagicCruise = 100;
+          public static double motionMagicAccel = 50;
+
+          public static final double compP = 0;
+          public static final double compI = 0;
+          public static final double compD = 0;
+          public static final double compS = 0;
+
+          public static final double gearRatio = 1;
+          public static double currentLimit = 60;
       }
   }
 
@@ -121,4 +169,30 @@ public final class Constants {
 
 
   }
+  public static class Intake{
+      public static final int rollerMotorCANID = 0;
+      public static final double RollerCurrentLimit = 0.0;
+      public static final double RollerGearRatio = 0.0;
+      public static final double RollerMotionMagicCruise = 0.0;
+      public static final double RollerMotionMagicAccel = 0.0;
+      public static final double RollerkP = 0.0;
+      public static final double RollerkI = 0.0;
+      public static final double RollerkD = 0.0;
+      public static final double RollerkS = 0.0;
+      public static final double RollerkG = 0.0;
+
+      public static final int pivotMotorCANID = 0;
+      public static final double PivotCurrentLimit = 0.0;
+      public static final double PivotGearRatio = 0.0;
+      public static final double PivotMotionMagicCruise = 0.0;
+      public static final double PivotMotionMagicAccel = 0.0;
+      public static final double PivotkP = 0.0;
+      public static final double PivotkI = 0.0;
+      public static final double PivotkD = 0.0;
+      public static final double PivotkS = 0.0;
+      public static final double PivotkG = 0.0;
+
+      public static final double FrequencyUpdateRate = 0.0;
+    }
+
 }

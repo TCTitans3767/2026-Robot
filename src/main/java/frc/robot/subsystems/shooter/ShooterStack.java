@@ -1,13 +1,14 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.commands.basicCommands.HomeTurretCommand;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.shooter.feeder.Feeder;
 import frc.robot.subsystems.shooter.flywheel.Flywheel;
@@ -29,7 +30,7 @@ public class ShooterStack {
     private final Pose2d robotRelativeOffset;
     private final String name;
 
-    private boolean shootingEnabled = true;
+    private boolean shootingEnabled = false;
 
     private Translation2d shotTarget = new Translation2d();
     private double distanceToTarget = 0;
@@ -41,6 +42,8 @@ public class ShooterStack {
     private double idleVelocity = 2000;
 
     private int simCycleCount = 0;
+
+    private boolean pointToTarget = false;
 
     public ShooterStack(String name, Turret turret, Hood hood, Flywheel flywheel, Feeder feeder, Pose2d robotRelativeOffset) {
         this.robotRelativeOffset = robotRelativeOffset;
@@ -57,18 +60,27 @@ public class ShooterStack {
         distanceToTarget = currentShooterPosition.getTranslation().getDistance(shotTarget);
         Logger.recordOutput(name + " Distance To Target", distanceToTarget);
         double targetTurretRotation = calculateTurretRotation();
+        double angleToTarget = targetTurretRotation - drivetrain.getRotation().getRadians();
 
-        turret.setRotation(targetTurretRotation + (0.1 * calculateVelocityAwayFromTarget(targetTurretRotation - drivetrain.getRotation().getRadians())));
+
+        if (pointToTarget) {
+            turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
+        }
         hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
 
         if (shootingEnabled) {
             flywheel.setVelocity(
                     flywheelMap.get(distanceToTarget) != null ?
-                    flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection(targetTurretRotation - drivetrain.getRotation().getRadians()))
+                    flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection((angleToTarget)))
                     : 0
             );
         } else {
             flywheel.setVelocity(idleVelocity);
+        }
+
+        if (turret.getVelocity() > Constants.Shooter.Turret.velocityLimit) {
+            feeder.setFeedVelocity(0);
+            return;
         }
 
         if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity()) || !shootingEnabled) {
@@ -80,7 +92,7 @@ public class ShooterStack {
         }
 
         if (Constants.currentMode == Constants.Mode.SIM) {
-            if (simCycleCount >= 30) {
+            if (simCycleCount >= 30 && shootingEnabled) {
                 shootSimFuel();
                 simCycleCount = 0;
             } else {
@@ -114,14 +126,18 @@ public class ShooterStack {
         double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
         double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
-        return ((Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter);
+        double correction = Units.radiansToRotations(-((Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) / Constants.Shooter.flywheelDiameter));
+
+        Logger.recordOutput(name + "flywheel velocity correction", correction);
+
+        return correction;
     }
 
-    private double calculateVelocityAwayFromTarget(double angleToTarget) {
+    private double calculateTurretLeadCorrection(double angleToTarget) {
         double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
         double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
-        return (Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity)));
+        return -Math.sin(Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) * Constants.Shooter.turretLeadCorrectionConstant;
     }
 
     public void setTurretAngle(double angle) {
@@ -154,5 +170,16 @@ public class ShooterStack {
                 MetersPerSecond.of(Units.rotationsToRadians(flywheel.getVelocity()) * Constants.Shooter.flywheelDiameter * 0.3),
                 Radians.of(hood.getAngle())
         ));
+    }
+
+    public void enablePointToTarget() {
+        this.pointToTarget = true;
+    }
+    public void disablePointToTarget() {
+        this.pointToTarget = false;
+    }
+
+    public Command homeTurretCommand() {
+        return new HomeTurretCommand(this.turret);
     }
 }
