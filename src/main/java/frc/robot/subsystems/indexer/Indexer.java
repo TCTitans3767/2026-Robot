@@ -8,17 +8,15 @@ public class Indexer extends SubsystemBase {
 
     private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
     private final IndexerIO io;
-    private final String name;
 
-    public Indexer(String name, IndexerIO io) {
+    public Indexer(IndexerIO io) {
         this.io = io;
-        this.name = name;
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs(name, inputs);
+        Logger.processInputs("Indexer", inputs);
     }
 
     public void setIndexSpeed(double speed) {
