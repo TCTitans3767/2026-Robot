@@ -5,6 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -19,12 +20,19 @@ import jdk.jshell.Snippet;
 
 public class IndexerIOCompetition implements IndexerIO{
 
-    private final TalonFX indexerMotor = new TalonFX(Constants.Indexer.indexerCanID);
+    private enum ControlMode {
+        POWER,
+        VELOCITY
+    }
+
+    private final TalonFX indexerMotor;
     private final TalonFXConfiguration config = new TalonFXConfiguration();
     private final MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
     private final Slot0Configs slot0Configs = new Slot0Configs();
 
     private double velocityTarget = 0;
+    private double targetPower = 0;
+    private ControlMode controlMode = ControlMode.POWER;
 
     private final StatusSignal<AngularVelocity> velocityStatusSignal;
     private final StatusSignal<Current> amperageStatusSignal;
@@ -33,6 +41,9 @@ public class IndexerIOCompetition implements IndexerIO{
     // Motor Setup
 
     public IndexerIOCompetition() {
+        indexerMotor = new TalonFX(Constants.Indexer.indexerCanID);
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimit = Constants.Indexer.rollerCurrentLimit;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.Feedback.SensorToMechanismRatio = Constants.Indexer.rollerConversionFactor;
@@ -49,7 +60,6 @@ public class IndexerIOCompetition implements IndexerIO{
         indexerMotor.getConfigurator().apply(config);
         indexerMotor.getConfigurator().apply(slot0Configs);
         indexerMotor.getConfigurator().apply(motionMagicConfigs);
-        indexerMotor.setNeutralMode(NeutralModeValue.Coast);
 
         velocityStatusSignal = indexerMotor.getVelocity();
         amperageStatusSignal = indexerMotor.getStatorCurrent();
@@ -60,7 +70,11 @@ public class IndexerIOCompetition implements IndexerIO{
 
     @Override
     public void updateInputs(IndexerIO.IndexerIOInputs inputs) {
-        indexerMotor.setControl(new MotionMagicVoltage(velocityTarget));
+
+        switch (this.controlMode) {
+            case VELOCITY -> indexerMotor.setControl(new MotionMagicVelocityVoltage(this.velocityTarget));
+            case POWER -> indexerMotor.set(this.targetPower);
+        }
 
         inputs.targetVelocity = this.velocityTarget;
         inputs.currentAmperage = amperageStatusSignal.getValueAsDouble();
@@ -69,7 +83,14 @@ public class IndexerIOCompetition implements IndexerIO{
     }
 
     @Override
+    public void setIndexSpeed(double speed) {
+        this.controlMode = ControlMode.POWER;
+        this.targetPower = speed;
+    }
+
+    @Override
     public void setVelocity(double rotationsPerSecond) {
+        this.controlMode = ControlMode.VELOCITY;
         this.velocityTarget = rotationsPerSecond;
     }
 }
