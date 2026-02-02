@@ -144,6 +144,31 @@ public final class Constants {
       }
   }
 
+  public static class Indexer {
+      // Sim
+      public static final double simP = 0.0;
+      public static final double simI = 0.0;
+      public static final double simD = 0.0;
+      public static final double simS = 0.0;
+
+      // Competition bot
+      public static final double compP = 0.0;
+      public static final double compI = 0.0;
+      public static final double compD = 0.0;
+      public static final double compS = 0.0;
+
+      public static final int indexerCanID = 67;
+
+      public static final double rollerCurrentLimit = 60;
+      public static final double rollerConversionFactor = 1;
+
+      public static final double rollerMaxVelocity = 10;
+      public static final double rollerMaxAcceleration = 10;
+
+      public static final double statusUpdateFrequency = 50;
+
+
+  }
   public static class Intake{
       public static final int rollerMotorCANID = 0;
       public static final double RollerCurrentLimit = 0.0;

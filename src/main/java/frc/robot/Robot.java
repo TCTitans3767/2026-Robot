@@ -26,6 +26,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOCompetition;
+import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOCompetition;
@@ -70,6 +74,7 @@ public class Robot extends LoggedRobot {
 
   public static Drivetrain drivetrain;
   public static ShooterArray shooterArray = new ShooterArray();
+  public static Indexer indexer;
   public static Intake intake;
 
   public static SwerveDriveSimulation driveSimulation = null;
@@ -165,6 +170,7 @@ public class Robot extends LoggedRobot {
                       new Feeder("rightFeeder", new FeederIO() {}),
                       new Pose2d()
               ));
+              indexer = new Indexer(new IndexerIOCompetition());
               intake = new Intake(new IntakeIOCompetition());
               break;
 
@@ -196,6 +202,7 @@ public class Robot extends LoggedRobot {
                       new Feeder("rightFeeder", new FeederIOSim()),
                       new Pose2d(Units.inchesToMeters(-8), Units.inchesToMeters(-8), new Rotation2d())
               ));
+              indexer = new Indexer(new IndexerIO() {});
 
               intake = new Intake(new IntakeIO() {});
 
@@ -228,6 +235,7 @@ public class Robot extends LoggedRobot {
                       new Feeder("rightFeeder", new FeederIO() {}),
                       new Pose2d()
               ));
+              indexer = new Indexer(new IndexerIO() {});
               break;
     }
 
