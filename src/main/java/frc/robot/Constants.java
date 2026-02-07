@@ -48,6 +48,12 @@ public final class Constants {
   public static class FieldPoses {
       public static final Translation2d blueHub = new Translation2d(4.629, 4.014);
       public static final Translation2d redHub = new Translation2d(11.943, 4.014);
+
+      public static final Translation2d blueLeftPassTarget = new Translation2d(1.35, 6.75);
+      public static final Translation2d blueRightPassTarget = new Translation2d(1.35, 1.75);
+
+      public static final Translation2d redLeftPassTarget = new Translation2d(15.1, 1.75);
+      public static final Translation2d redRightPassTarget = new Translation2d(15.1, 6.75);
   }
 
   public static class Shooter {
