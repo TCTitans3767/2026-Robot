@@ -119,14 +119,11 @@ public class HubState{
     public static Optional<Alliance> getAutoWinner() {
         String msg = DriverStation.getGameSpecificMessage();
         char msgChar = msg.length() > 0 ? msg.charAt(0) : ' ';
-        switch (msgChar) {
-            case 'B':
-                return Optional.of(Alliance.Blue);
-            case 'R':
-                return Optional.of(Alliance.Red);
-            default:
-                return Optional.empty();
-        }
+        return switch (msgChar) {
+            case 'B' -> Optional.of(Alliance.Blue);
+            case 'R' -> Optional.of(Alliance.Red);
+            default -> Optional.empty();
+        };
     }
 
     /**
