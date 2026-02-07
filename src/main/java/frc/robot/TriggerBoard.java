@@ -7,12 +7,16 @@ import org.littletonrobotics.junction.Logger;
 
 public class TriggerBoard {
 
-    public static boolean isOnSide() {
-        return Robot.drivetrain.getPose().getX() < 4.44;
-    }
-
     public static boolean isInNeutralZone() {
         return (Robot.drivetrain.getPose().getX() > 4.44) && (Robot.drivetrain.getPose().getX() < 12.1);
+    }
+
+    public static boolean isOnSide() {
+        return Robot.getAlliance() == DriverStation.Alliance.Blue ? (Robot.drivetrain.getPose().getX() < 4.44) : (Robot.drivetrain.getPose().getX() > 12.128);
+    }
+
+    public static boolean isOffSide() {
+        return Robot.getAlliance() == DriverStation.Alliance.Red ? (Robot.drivetrain.getPose().getX() < 4.44) : Robot.drivetrain.getPose().getX() > 12.128;
     }
 
     public static boolean leftOfHub() {
