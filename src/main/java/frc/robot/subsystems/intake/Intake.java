@@ -5,10 +5,15 @@ import frc.robot.subsystems.shooter.feeder.FeederIO;
 import frc.robot.subsystems.intake.IntakeIO;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.function.DoubleSupplier;
+
 public class Intake extends SubsystemBase {
 
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     private final IntakeIO io;
+
+    private DoubleSupplier velocitySupplier;
+    private boolean runRollerWithSupplier = false;
 
     public Intake(IntakeIO io) {
         this.io = io;
@@ -16,6 +21,8 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        this.setRollerVelocity(this.velocitySupplier.getAsDouble());
+
         io.updateInputs(inputs);
         Logger.processInputs("Intake", inputs);
     }
@@ -30,7 +37,12 @@ public class Intake extends SubsystemBase {
         io.setRollerSpeed(speed);
     }
     public void setRollerVelocity(double velocity) {
+        runRollerWithSupplier = false;
         io.setRollerVelocity(velocity);
+    }
+    public void setRollerVelocitySupplier(DoubleSupplier velocitySupplier) {
+        runRollerWithSupplier = true;
+        this.velocitySupplier = velocitySupplier;
     }
 
 }

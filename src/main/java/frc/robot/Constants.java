@@ -193,6 +193,7 @@ public final class Constants {
       public static final double PivotkG = 0.0;
 
       public static final double FrequencyUpdateRate = 0.0;
-    }
+      public static double rollerRadius = Units.inchesToMeters(1);
+  }
 
 }
