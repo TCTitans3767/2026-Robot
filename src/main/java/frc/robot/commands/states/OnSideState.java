@@ -10,6 +10,8 @@ import frc.robot.subsystems.robotControl.RobotControl;
 import frc.robot.util.HubState;
 import frc.robot.utils.RobotTransitions;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 @State
 public class OnSideState extends Command {
 
@@ -30,10 +32,10 @@ public class OnSideState extends Command {
             inactive();
         }
 
-        if (HubState.timeRemainingInCurrentShift() <= Constants.shiftOffset && !HubState.isActiveNext()) {
+        if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
             RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
             return;
-        } else if (HubState.timeRemainingInCurrentShift() <= Constants.shiftOffset && HubState.isActiveNext()) {
+        } else if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
             RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
             return;
         }
