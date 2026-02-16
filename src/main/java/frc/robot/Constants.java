@@ -16,7 +16,11 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.TimeUnit;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.RobotBase;
+
+import static edu.wpi.first.units.Units.Seconds;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -26,6 +30,9 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+  public static final double shiftOffset = 1.0;
+
     public static class DriverController {
         public static final int PORT = 0;
     }
@@ -48,6 +55,12 @@ public final class Constants {
   public static class FieldPoses {
       public static final Translation2d blueHub = new Translation2d(4.629, 4.014);
       public static final Translation2d redHub = new Translation2d(11.943, 4.014);
+
+      public static final Translation2d blueLeftPassTarget = new Translation2d(1.35, 6.75);
+      public static final Translation2d blueRightPassTarget = new Translation2d(1.35, 1.75);
+
+      public static final Translation2d redLeftPassTarget = new Translation2d(15.1, 1.75);
+      public static final Translation2d redRightPassTarget = new Translation2d(15.1, 6.75);
   }
 
   public static class Shooter {

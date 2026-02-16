@@ -64,10 +64,7 @@ public class RobotContainer {
 
   private void setUpPathplannerCommands() {
 
-      Command transitTransition = new SetMode(RobotTransitions.transitTransition);
-
       Map<String, Command> pathPlannerCommands = Map.ofEntries(
-              entry("transitTransition", transitTransition)
       );
 
       NamedCommands.registerCommands(pathPlannerCommands);
