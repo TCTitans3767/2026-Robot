@@ -63,6 +63,11 @@ public final class Constants {
       public static final Translation2d redRightPassTarget = new Translation2d(15.1, 6.75);
   }
 
+  public static class Limelights {
+      public static final int minMegaTagOneEstimations = 10;
+      public static final double maxAmbiguity = 0.1;
+  }
+
   public static class Shooter {
       public static final InterpolatingDoubleTreeMap simHoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap simFlywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
