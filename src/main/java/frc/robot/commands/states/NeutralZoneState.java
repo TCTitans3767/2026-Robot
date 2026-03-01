@@ -29,17 +29,17 @@ public class NeutralZoneState extends Command {
         if (TriggerBoard.isRobotInNoShootingZone()) {
             inactive();
         } else {
-            if (HubState.isActive()) {
+            if (TriggerBoard.isHubActive()) {
                 active();
             } else {
                 inactive();
             }
         }
 
-        if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
+        if (TriggerBoard.isShiftSoon() && !HubState.isActiveNext()) {
             RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
             return;
-        } else if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
+        } else if (TriggerBoard.isShiftSoon() && HubState.isActiveNext()) {
             RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
             return;
         }

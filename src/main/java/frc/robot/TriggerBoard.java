@@ -4,9 +4,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.util.HubState;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.List;
+
+import static edu.wpi.first.units.Units.Seconds;
 
 public class TriggerBoard {
 
@@ -40,5 +43,13 @@ public class TriggerBoard {
             isInNoShootZone = isInNoShootZone | Robot.drivetrain.isInsideRectangle(noShootZone.get(0), noShootZone.get(1));
        }
         return isInNoShootZone;
+    }
+
+    public static boolean isShiftSoon() {
+       return HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset;
+    }
+
+    public static boolean isHubActive() {
+        return Robot.hubStateButton.get();
     }
 }

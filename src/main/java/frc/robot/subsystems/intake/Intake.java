@@ -21,7 +21,9 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.setRollerVelocity(this.velocitySupplier.getAsDouble());
+        if (runRollerWithSupplier) {
+            this.setRollerVelocity(this.velocitySupplier.getAsDouble());
+        }
 
         io.updateInputs(inputs);
         Logger.processInputs("Intake", inputs);

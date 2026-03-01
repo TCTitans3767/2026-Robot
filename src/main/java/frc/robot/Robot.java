@@ -20,6 +20,8 @@ import com.revrobotics.servohub.ServoHub;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,6 +50,7 @@ import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
+import frc.robot.util.GenericNTButton;
 import frc.robot.utils.DriveModes;
 import frc.robot.utils.RobotStates;
 import frc.robot.utils.RobotTransitions;
@@ -76,6 +79,8 @@ public class Robot extends LoggedRobot {
   public static ShooterArray shooterArray = new ShooterArray();
   public static Indexer indexer;
   public static Intake intake;
+
+  public static GenericNTButton hubStateButton = new GenericNTButton("Hub State", NetworkTableInstance.getDefault().getTable("Hub State"), true);
 
   public static SwerveDriveSimulation driveSimulation = null;
 
@@ -250,8 +255,8 @@ public class Robot extends LoggedRobot {
       DriveModes.initDriveModes();
 
     // initialize default state and drive commands
-    RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
-    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
+//    RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+//    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }
 

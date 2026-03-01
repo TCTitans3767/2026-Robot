@@ -18,10 +18,13 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.PanicCommand;
 import frc.robot.commands.SetMode;
 import frc.robot.commands.basicCommands.exampleCommands.ExampleCommand;
 import frc.robot.subsystems.robotControl.RobotControl;
+import frc.robot.util.HubState;
 import frc.robot.utils.RobotTransitions;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -60,6 +63,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+      new Trigger(HubState::isActive).onTrue(new InstantCommand(() -> Robot.hubStateButton.set(true))).onFalse(new InstantCommand(() -> Robot.hubStateButton.set(false)));
   }
 
   private void setUpPathplannerCommands() {
