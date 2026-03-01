@@ -26,19 +26,23 @@ public class OnSideState extends Command {
 
     @Override
     public void execute() {
-        if (HubState.isActive()) {
-            active();
-        } else {
+        if (TriggerBoard.isRobotInNoShootingZone()) {
             inactive();
+        } else {
+            if (HubState.isActive()) {
+                active();
+            } else {
+                inactive();
+            }
         }
-
-        if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
-            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
-            return;
-        } else if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
-            RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
-            return;
-        }
+//
+//        if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
+//            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
+//            return;
+//        } else if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
+//            RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
+//            return;
+//        }
 
         if (TriggerBoard.isInNeutralZone()) {
             RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);

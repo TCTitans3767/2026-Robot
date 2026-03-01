@@ -502,4 +502,11 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public boolean isInsideRectangle(Translation2d topLeftCorner, Translation2d bottomRightCorner) {
+        double currentX = getPose().getX();
+        double currentY = getPose().getY();
+
+        return (currentX > topLeftCorner.getX() && currentX < bottomRightCorner.getX()) && (currentY < topLeftCorner.getY() && currentY > bottomRightCorner.getY());
+    }
+
 }

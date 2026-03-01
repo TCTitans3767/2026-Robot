@@ -26,10 +26,14 @@ public class NeutralZoneState extends Command {
 
     @Override
     public void execute() {
-        if (HubState.isActive()) {
-            active();
-        } else {
+        if (TriggerBoard.isRobotInNoShootingZone()) {
             inactive();
+        } else {
+            if (HubState.isActive()) {
+                active();
+            } else {
+                inactive();
+            }
         }
 
         if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {

@@ -66,7 +66,11 @@ public class ShooterStack {
         if (pointToTarget) {
             turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
         }
-        hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
+        if (shootingEnabled) {
+            hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
+        } else {
+            hood.setAngle(Constants.Shooter.Hood.minimumPulseWidth);
+        }
 
         if (shootingEnabled) {
             flywheel.setVelocity(

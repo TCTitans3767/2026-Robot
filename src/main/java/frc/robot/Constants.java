@@ -16,11 +16,10 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.TimeUnit;
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.RobotBase;
 
-import static edu.wpi.first.units.Units.Seconds;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -61,6 +60,22 @@ public final class Constants {
 
       public static final Translation2d redLeftPassTarget = new Translation2d(15.1, 1.75);
       public static final Translation2d redRightPassTarget = new Translation2d(15.1, 6.75);
+
+      public static final List<List<Translation2d>> noShootZones = new ArrayList<>();
+
+      static {
+          // Blue Left Trench
+          noShootZones.add(List.of(new Translation2d(3.425, 8.180), new Translation2d(5.65, 6.7)));
+
+          // Blue Right Trench
+          noShootZones.add(List.of(new Translation2d(3.425, 1.36), new Translation2d(5.65, 0)));
+
+          // Red Right Trench
+          noShootZones.add(List.of(new Translation2d(10.7, 8.18), new Translation2d(13.125, 6.7)));
+
+          // Red Left Trench
+          noShootZones.add(List.of(new Translation2d(10.7, 1.36), new Translation2d(13.125, 0)));
+      }
   }
 
   public static class Limelights {

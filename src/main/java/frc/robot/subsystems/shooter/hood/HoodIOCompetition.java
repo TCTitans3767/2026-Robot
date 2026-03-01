@@ -8,51 +8,46 @@ import frc.robot.Robot;
 
 public class HoodIOCompetition implements HoodIO{
 
-    private final int leftServoChannel, rightServoChannel;
-    private final ServoChannelConfig leftServoChannelConfig, rightServoChannelConfig;
-    private final ServoChannel leftServo, rightServo;
+    private final int servoChannel;
+    private final ServoChannelConfig channelConfig;
+    private final ServoChannel servo;
 
     private double angleTarget = 0;
     private int servoPulseWidth = 1000;
 
-    public HoodIOCompetition(int leftServoChannel, int rightServoChannel) {
-        this.leftServoChannel = leftServoChannel;
-        this.leftServoChannelConfig = new ServoChannelConfig(ServoChannel.ChannelId.fromInt(leftServoChannel));
-        this.leftServo = Robot.servoHub.getServoChannel(ServoChannel.ChannelId.fromInt(leftServoChannel));
-        this.rightServoChannel = rightServoChannel;
-        this.rightServoChannelConfig = new ServoChannelConfig(ServoChannel.ChannelId.fromInt(rightServoChannel));
-        this.rightServo = Robot.servoHub.getServoChannel(ServoChannel.ChannelId.fromInt(rightServoChannel));
+    public HoodIOCompetition(int servoChannel) {
+        this.servoChannel = servoChannel;
+        this.channelConfig = new ServoChannelConfig(ServoChannel.ChannelId.fromInt(servoChannel));
+        this.servo = Robot.servoHub.getServoChannel(ServoChannel.ChannelId.fromInt(servoChannel));
 
-        leftServoChannelConfig.disableBehavior(ServoChannelConfig.BehaviorWhenDisabled.kDoNotSupplyPower);
-        leftServoChannelConfig.pulseRange(Constants.Shooter.Hood.minimumPulseWidth, 1500, Constants.Shooter.Hood.maximumPulseWidth);
-        rightServoChannelConfig.disableBehavior(ServoChannelConfig.BehaviorWhenDisabled.kDoNotSupplyPower);
-        rightServoChannelConfig.pulseRange(Constants.Shooter.Hood.minimumPulseWidth, 1500, Constants.Shooter.Hood.maximumPulseWidth);
+        channelConfig.disableBehavior(ServoChannelConfig.BehaviorWhenDisabled.kDoNotSupplyPower);
+        channelConfig.pulseRange(Constants.Shooter.Hood.minimumPulseWidth, 1500, Constants.Shooter.Hood.maximumPulseWidth);
 
-        this.leftServo.setPowered(true);
-        this.rightServo.setPowered(true);
+        this.servo.setPowered(true);
 
-        this.leftServo.setEnabled(true);
-        this.rightServo.setEnabled(true);
+        this.servo.setEnabled(true);
     }
 
     @Override
     public void updateInputs(HoodIOInputs inputs) {
-        leftServo.setPulseWidth(MathUtil.clamp(servoPulseWidth, Constants.Shooter.Hood.minimumPulseWidth, Constants.Shooter.Hood.maximumPulseWidth));
-        rightServo.setPulseWidth(MathUtil.clamp(servoPulseWidth, Constants.Shooter.Hood.minimumPulseWidth, Constants.Shooter.Hood.maximumPulseWidth));
+        servo.setPulseWidth(MathUtil.clamp(servoPulseWidth, Constants.Shooter.Hood.minimumPulseWidth, Constants.Shooter.Hood.maximumPulseWidth));
 
         inputs.targetAngle = this.angleTarget;
         inputs.commandedPulseWidth = this.servoPulseWidth;
-        inputs.currentAngle = this.leftServo.getPulseWidth();
+        inputs.currentAngle = this.servo.getPulseWidth();
     }
 
     @Override
     public void setAngle(double angle) {
-        this.angleTarget = angle;
-        this.servoPulseWidth = angleToPulseWidth(angle);
-    }
+//        this.angleTarget = angle;
+//        this.servoPulseWidth = angleToPulseWidth(angle);
+        this.servoPulseWidth = (int) angle;
+   }
 
     // TODO: give this function an actual output that does what it should
     private int angleToPulseWidth(double angle) {
         return 1000;
     }
+
+    private double pulseWidthToAngle(int pulseWidth) {return 0.0;}
 }

@@ -1,9 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import frc.robot.subsystems.drive.Drivetrain;
 import org.littletonrobotics.junction.Logger;
+
+import java.util.List;
 
 public class TriggerBoard {
 
@@ -29,5 +32,13 @@ public class TriggerBoard {
 
     public static boolean isHopperFull() {
         return true;
+    }
+
+    public static boolean isRobotInNoShootingZone() {
+        boolean isInNoShootZone = false;
+        for (List<Translation2d> noShootZone : Constants.FieldPoses.noShootZones) {
+            isInNoShootZone = isInNoShootZone | Robot.drivetrain.isInsideRectangle(noShootZone.get(0), noShootZone.get(1));
+       }
+        return isInNoShootZone;
     }
 }
