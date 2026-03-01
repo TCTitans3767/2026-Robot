@@ -74,4 +74,22 @@ public class ShooterArray extends SubsystemBase{
         return homeAllTurretsCommand;
     }
 
+    public void setFeederPower(double power) {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.setFeederPower(power);
+        });
+    }
+
+    public void setTurretPower(double power) {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.setTurretPower(power);
+        });
+    }
+
+    public void setFlywheelPower(double power) {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.setFlywheelPower(power);
+        });
+    }
+
 }

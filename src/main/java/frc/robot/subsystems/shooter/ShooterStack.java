@@ -182,4 +182,16 @@ public class ShooterStack {
     public Command homeTurretCommand() {
         return new HomeTurretCommand(this.turret);
     }
+
+    public void setFeederPower(double power) {
+        feeder.setFeedSpeed(power);
+    }
+
+    public void setFlywheelPower(double power) {
+        flywheel.setPower(power);
+    }
+
+    public void setTurretPower(double power) {
+        turret.setPower(power);
+    }
 }
