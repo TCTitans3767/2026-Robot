@@ -43,7 +43,7 @@ public class TurretIOCompetition implements TurretIO{
 
     public TurretIOCompetition(int CANID) {
         this.CANID = CANID;
-        turretMotor = new TalonFX(CANID);
+        turretMotor = new TalonFX(CANID, Constants.SuperstructureCANBus);
 
         turretMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turretMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

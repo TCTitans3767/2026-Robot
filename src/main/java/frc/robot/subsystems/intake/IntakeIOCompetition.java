@@ -46,12 +46,12 @@ public class IntakeIOCompetition implements IntakeIO{
     private final StatusSignal<Current> pivotMotorTorque;
 
     public IntakeIOCompetition() {
-        this.rollerMotor = new TalonFX(Constants.Intake.rollerMotorCANID);
+        this.rollerMotor = new TalonFX(Constants.Intake.rollerMotorCANID, Constants.SuperstructureCANBus);
         this.rollerMotorConfiguration = new TalonFXConfiguration();
         this.rollerMotorSlot0Config = new Slot0Configs();
         this.rollerMotorMotionMagicConfig = new MotionMagicConfigs();
 
-        this.pivotMotor = new TalonFX(Constants.Intake.pivotMotorCANID);
+        this.pivotMotor = new TalonFX(Constants.Intake.pivotMotorCANID, Constants.SuperstructureCANBus);
         this.pivotMotorConfiguration = new TalonFXConfiguration();
         this.pivotMotorSlot0Config = new Slot0Configs();
         this.pivotMotorMotionMagicConfig = new MotionMagicConfigs();

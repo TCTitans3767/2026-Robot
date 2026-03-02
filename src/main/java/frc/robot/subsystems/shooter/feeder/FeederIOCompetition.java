@@ -34,7 +34,7 @@ public class FeederIOCompetition implements FeederIO{
     private final StatusSignal<Current> torqueStatusSignal;
 
     public FeederIOCompetition(int CANID) {
-        this.feederMotor = new TalonFX(CANID);
+        this.feederMotor = new TalonFX(CANID, Constants.SuperstructureCANBus);
 
         feederMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         feederMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

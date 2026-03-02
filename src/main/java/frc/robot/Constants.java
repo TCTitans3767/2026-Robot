@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
@@ -31,6 +32,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
   public static final double shiftOffset = 1.0;
+  public static CANBus SuperstructureCANBus = new CANBus("rio");
 
     public static class DriverController {
         public static final int PORT = 0;
@@ -155,7 +157,7 @@ public final class Constants {
           public static final double compD = 0;
           public static final double compS = 0;
 
-          public static final double gearRatio = 1;
+          public static final double gearRatio = 0.75;
           public static double currentLimit = 60;
       }
       public static class Feeder{
@@ -172,7 +174,7 @@ public final class Constants {
           public static final double compD = 0;
           public static final double compS = 0;
 
-          public static final double gearRatio = 1;
+          public static final double gearRatio = 1.67;
           public static double currentLimit = 60;
       }
   }
@@ -204,8 +206,8 @@ public final class Constants {
   }
   public static class Intake{
       public static final int rollerMotorCANID = 0;
-      public static final double RollerCurrentLimit = 0.0;
-      public static final double RollerGearRatio = 0.0;
+      public static final double RollerCurrentLimit = 40;
+      public static final double RollerGearRatio = 0.75;
       public static final double RollerMotionMagicCruise = 0.0;
       public static final double RollerMotionMagicAccel = 0.0;
       public static final double RollerkP = 0.0;
@@ -215,8 +217,8 @@ public final class Constants {
       public static final double RollerkG = 0.0;
 
       public static final int pivotMotorCANID = 0;
-      public static final double PivotCurrentLimit = 0.0;
-      public static final double PivotGearRatio = 0.0;
+      public static final double PivotCurrentLimit = 40;
+      public static final double PivotGearRatio = 11.555;
       public static final double PivotMotionMagicCruise = 0.0;
       public static final double PivotMotionMagicAccel = 0.0;
       public static final double PivotkP = 0.0;
@@ -225,7 +227,7 @@ public final class Constants {
       public static final double PivotkS = 0.0;
       public static final double PivotkG = 0.0;
 
-      public static final double FrequencyUpdateRate = 0.0;
+      public static final double FrequencyUpdateRate = 50;
       public static double rollerRadius = Units.inchesToMeters(1);
   }
 

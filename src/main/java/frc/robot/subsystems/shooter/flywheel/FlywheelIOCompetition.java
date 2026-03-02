@@ -35,7 +35,7 @@ public class FlywheelIOCompetition implements FlywheelIO{
     private final StatusSignal<Current> torqueStatusSignal;
 
     public FlywheelIOCompetition(int CANID) {
-        flywheelMotor = new TalonFX(CANID);
+        flywheelMotor = new TalonFX(CANID, Constants.SuperstructureCANBus);
 
         flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         flywheelConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
