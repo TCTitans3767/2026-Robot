@@ -79,6 +79,6 @@ public class DrivetrainPublisher {
     }
 
     public static void updateDrivetrain(ReceiveSupplierValues driveFunction) {
-        driveFunction.receive(xVelocitySupplier, yVelocitySupplier, thetaVelocitySupplier, inFieldCentricSupplier, acceptInputsSupplier);
+        driveFunction.receive(DrivetrainPublisher.xVelocitySupplier, DrivetrainPublisher.yVelocitySupplier, DrivetrainPublisher.thetaVelocitySupplier, DrivetrainPublisher.inFieldCentricSupplier, DrivetrainPublisher.acceptInputsSupplier);
     }
 }

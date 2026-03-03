@@ -175,8 +175,8 @@ public class Robot extends LoggedRobot {
                       new Feeder("rightFeeder", new FeederIO() {}),
                       new Pose2d()
               ));
-              indexer = new Indexer(new IndexerIOCompetition());
-              intake = new Intake(new IntakeIOCompetition());
+//              indexer = new Indexer(new IndexerIOCompetition());
+//              intake = new Intake(new IntakeIOCompetition());
               break;
 
           case SIM:
@@ -255,7 +255,7 @@ public class Robot extends LoggedRobot {
       DriveModes.initDriveModes();
 
     // initialize default state and drive commands
-//    RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+    RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
 //    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }

@@ -134,6 +134,9 @@ public final class Constants {
           public static final double GEAR_2_TOOTH_COUNT = 24.0;
           public static final double SLOPE = (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
                   / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
+
+          public static final int leftTurretMotorCANID = 43;
+          public static final int rightTurretMotorCANID = 42;
       }
       public static class Hood {
           public static final double simP = 0.5;
@@ -159,6 +162,9 @@ public final class Constants {
 
           public static final double gearRatio = 0.75;
           public static double currentLimit = 60;
+
+          public static final int leftFlywheelMotorCANID = 19;
+          public static final int rightFlywheelMotorCANID = 18;
       }
       public static class Feeder{
           public static final double simP = 6;
@@ -176,6 +182,9 @@ public final class Constants {
 
           public static final double gearRatio = 1.67;
           public static double currentLimit = 60;
+
+          public static final int leftFeederMotorCANID = 20;
+          public static final int rightFeederMotorCANID = 44;
       }
   }
 
@@ -192,7 +201,7 @@ public final class Constants {
       public static final double compD = 0.0;
       public static final double compS = 0.0;
 
-      public static final int indexerCanID = 67;
+      public static final int indexerCanID = 25;
 
       public static final double rollerCurrentLimit = 60;
       public static final double rollerConversionFactor = 1;
@@ -201,8 +210,6 @@ public final class Constants {
       public static final double rollerMaxAcceleration = 10;
 
       public static final double statusUpdateFrequency = 50;
-
-
   }
   public static class Intake{
       public static final int rollerMotorCANID = 0;
@@ -216,7 +223,7 @@ public final class Constants {
       public static final double RollerkS = 0.0;
       public static final double RollerkG = 0.0;
 
-      public static final int pivotMotorCANID = 0;
+      public static final int pivotMotorCANID = 40;
       public static final double PivotCurrentLimit = 40;
       public static final double PivotGearRatio = 11.555;
       public static final double PivotMotionMagicCruise = 0.0;
