@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import ControlAnnotations.DriveMode;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
@@ -50,6 +51,7 @@ import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
+import frc.robot.util.DrivetrainPublisher;
 import frc.robot.util.GenericNTButton;
 import frc.robot.utils.DriveModes;
 import frc.robot.utils.RobotStates;
@@ -295,6 +297,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
+
+    DrivetrainPublisher.setAcceptInputsSupplier(() -> false);
   }
 
   /** This function is called periodically during autonomous. */
@@ -311,6 +315,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    DrivetrainPublisher.setAcceptInputsSupplier(() -> true);
   }
 
   /** This function is called periodically during operator control. */
