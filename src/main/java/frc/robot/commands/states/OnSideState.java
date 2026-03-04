@@ -21,20 +21,20 @@ public class OnSideState extends Command {
 
     @Override
     public void initialize() {
-        // TODO: do this
+        Robot.indexer.setIndexVelocity(15);
     }
 
     @Override
     public void execute() {
-        if (TriggerBoard.isRobotInNoShootingZone()) {
-            inactive();
-        } else {
-            if (HubState.isActive()) {
-                active();
-            } else {
-                inactive();
-            }
-        }
+//        if (TriggerBoard.isRobotInNoShootingZone()) {
+//            inactive();
+//        } else {
+//            if (HubState.isActive()) {
+//                active();
+//            } else {
+//                inactive();
+//            }
+//        }
 //
 //        if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
 //            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
@@ -44,19 +44,23 @@ public class OnSideState extends Command {
 //            return;
 //        }
 
-        if (TriggerBoard.isInNeutralZone()) {
-            RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
-            return;
-        }
+//        if (TriggerBoard.isInNeutralZone()) {
+//            RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
+//            return;
+//        }
+        active();
     }
 
     public void active() {
-        Robot.shooterArray.enableShooting(true);
+        Robot.shooterArray.enableShooting(Robot.driverController.getRightTriggerAxis() > 0.5);
     }
 
     public void inactive() {
         Robot.shooterArray.enableShooting(false);
     }
 
-
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

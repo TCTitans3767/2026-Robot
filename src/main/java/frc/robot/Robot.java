@@ -19,7 +19,9 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import com.revrobotics.servohub.ServoHub;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -36,20 +38,25 @@ import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOCompetition;
+import frc.robot.subsystems.limelight.LimelightCamera;
 import frc.robot.subsystems.robotControl.RobotControl;
 import frc.robot.subsystems.shooter.ShooterArray;
 import frc.robot.subsystems.shooter.ShooterStack;
 import frc.robot.subsystems.shooter.feeder.Feeder;
 import frc.robot.subsystems.shooter.feeder.FeederIO;
+import frc.robot.subsystems.shooter.feeder.FeederIOCompetition;
 import frc.robot.subsystems.shooter.feeder.FeederIOSim;
 import frc.robot.subsystems.shooter.flywheel.Flywheel;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIOCompetition;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOSim;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.hood.HoodIO;
+import frc.robot.subsystems.shooter.hood.HoodIOCompetition;
 import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
+import frc.robot.subsystems.shooter.turret.TurretIOCompetition;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
 import frc.robot.util.DrivetrainPublisher;
 import frc.robot.util.GenericNTButton;
@@ -81,6 +88,7 @@ public class Robot extends LoggedRobot {
   public static ShooterArray shooterArray = new ShooterArray();
   public static Indexer indexer;
   public static Intake intake;
+  public static LimelightCamera shooterLimelight;
 
   public static GenericNTButton hubStateButton = new GenericNTButton("Hub State", NetworkTableInstance.getDefault().getTable("Hub State"), true);
 
@@ -163,22 +171,23 @@ public class Robot extends LoggedRobot {
                               new ModuleIOReal(TunerConstants.BackRight));
               shooterArray.addShooter(new ShooterStack(
                       "LeftShooterStack",
-                      new Turret("leftTurret", new TurretIO() {}),
-                      new Hood("leftHood", new HoodIO() {}),
-                      new Flywheel("leftFlywheel", new FlywheelIO() {}),
-                      new Feeder("leftFeeder", new FeederIO() {}),
-                      new Pose2d()
+                      new Turret("leftTurret", new TurretIOCompetition(Constants.Shooter.Turret.leftTurretMotorCANID)),
+                      new Hood("leftHood", new HoodIOCompetition(Constants.Shooter.Hood.leftHoodServoHubPort)),
+                      new Flywheel("leftFlywheel", new FlywheelIOCompetition(Constants.Shooter.Flywheel.leftFlywheelMotorCANID)),
+                      new Feeder("leftFeeder", new FeederIOCompetition(Constants.Shooter.Feeder.leftFeederMotorCANID)),
+                      new Pose2d(Units.inchesToMeters(-5.75), Units.inchesToMeters(5.75), new Rotation2d())
               ));
               shooterArray.addShooter(new ShooterStack(
                       "RightShooterStack",
-                      new Turret("rightTurret", new TurretIO() {}),
-                      new Hood("rightHood", new HoodIO() {}),
-                      new Flywheel("rightFlywheel", new FlywheelIO() {}),
-                      new Feeder("rightFeeder", new FeederIO() {}),
-                      new Pose2d()
+                      new Turret("rightTurret", new TurretIOCompetition(Constants.Shooter.Turret.rightTurretMotorCANID)),
+                      new Hood("rightHood", new HoodIOCompetition(Constants.Shooter.Hood.rightHoodServoHubPort)),
+                      new Flywheel("rightFlywheel", new FlywheelIOCompetition(Constants.Shooter.Flywheel.rightFlywheelMotorCANID)),
+                      new Feeder("rightFeeder", new FeederIOCompetition(Constants.Shooter.Feeder.rightFeederMotorCANID)),
+                      new Pose2d(Units.inchesToMeters(-5.75), Units.inchesToMeters(-5.75), new Rotation2d())
               ));
-//              indexer = new Indexer(new IndexerIOCompetition());
-//              intake = new Intake(new IntakeIOCompetition());
+              indexer = new Indexer(new IndexerIOCompetition());
+              intake = new Intake(new IntakeIOCompetition());
+//              shooterLimelight = new LimelightCamera("Shooter Limelight", new Pose3d(Units.inchesToMeters(-11.5), Units.inchesToMeters(-12.75), Units.inchesToMeters(18.75), new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(145))), LimelightCamera.limelightPipeline.APRIL_TAG);
               break;
 
           case SIM:
@@ -258,6 +267,7 @@ public class Robot extends LoggedRobot {
 
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
+    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }

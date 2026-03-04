@@ -29,7 +29,8 @@ public class IntakeIOCompetition implements IntakeIO{
     private final Slot0Configs rollerMotorSlot0Config, pivotMotorSlot0Config;
     private final MotionMagicConfigs rollerMotorMotionMagicConfig, pivotMotorMotionMagicConfig;
 
-    private ControlMode rollerControlMode, pivotControlMode;
+    private ControlMode rollerControlMode = ControlMode.POWER;
+    private ControlMode pivotControlMode = ControlMode.POSITION;
     private double rollerTargetPower = 0;
     private double rollerTargetVelocity = 0;
 
@@ -80,7 +81,7 @@ public class IntakeIOCompetition implements IntakeIO{
         pivotMotorConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         pivotMotorConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         pivotMotorConfiguration.CurrentLimits.StatorCurrentLimit = Constants.Intake.PivotCurrentLimit;
-        pivotMotorConfiguration.Feedback.RotorToSensorRatio = Constants.Intake.PivotGearRatio;
+        pivotMotorConfiguration.Feedback.SensorToMechanismRatio = Constants.Intake.PivotGearRatio;
 
         pivotMotorMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Intake.PivotMotionMagicCruise;
         pivotMotorMotionMagicConfig.MotionMagicAcceleration = Constants.Intake.PivotMotionMagicAccel;
@@ -105,6 +106,8 @@ public class IntakeIOCompetition implements IntakeIO{
         pivotMotorAmperage = pivotMotor.getStatorCurrent();
         pivotMotorTorque = pivotMotor.getTorqueCurrent();
 
+        pivotMotor.setPosition(0.37);
+
         BaseStatusSignal.setUpdateFrequencyForAll(
                 Constants.Intake.FrequencyUpdateRate,
                 rollerMotorVelocity,
@@ -123,6 +126,7 @@ public class IntakeIOCompetition implements IntakeIO{
                 rollerMotor.set(rollerTargetPower);
             }
             case POSITION -> {
+                break;
             }
             case VELOCITY -> {
                 rollerMotor.setControl(new MotionMagicVelocityVoltage(rollerTargetVelocity));
@@ -137,6 +141,7 @@ public class IntakeIOCompetition implements IntakeIO{
                 pivotMotor.setControl(new MotionMagicVoltage(pivotTargetPosition));
             }
             case VELOCITY -> {
+                break;
             }
         }
 

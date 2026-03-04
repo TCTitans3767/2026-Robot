@@ -64,7 +64,7 @@ public class ShooterStack {
 
 
         if (pointToTarget) {
-            turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
+            turret.setRotation(Units.radiansToRotations(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget)));
         }
         if (shootingEnabled) {
             hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
@@ -73,13 +73,16 @@ public class ShooterStack {
         }
 
         if (shootingEnabled) {
-            flywheel.setVelocity(
-                    flywheelMap.get(distanceToTarget) != null ?
-                    flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection((angleToTarget)))
-                    : 0
-            );
+//            System.out.println("shooting enabled");
+            flywheel.setVelocity(50);
+//            flywheel.setVelocity(
+//                    flywheelMap.get(distanceToTarget) != null ?
+//                    flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection((angleToTarget)))
+//                    : 0
+//            );
         } else {
             flywheel.setVelocity(idleVelocity);
+            flywheel.setVelocity(0);
         }
 
         if (turret.getVelocity() > Constants.Shooter.Turret.velocityLimit) {
@@ -87,10 +90,10 @@ public class ShooterStack {
             return;
         }
 
-        if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity()) || !shootingEnabled) {
+        if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) || !shootingEnabled) {
             feeder.setFeedSpeed(0);
-        } else if ((flywheel.getVelocity() >= flywheel.getTargetVelocity()) && shootingEnabled) {
-            feeder.setFeedVelocity(30);
+        } else if ((flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) && shootingEnabled) {
+            feeder.setFeedVelocity(50);
         } else {
             feeder.setFeedVelocity(0);
         }
@@ -103,6 +106,7 @@ public class ShooterStack {
                 simCycleCount++;
             }
         }
+
     }
 
     public void setTarget(Translation2d target) {

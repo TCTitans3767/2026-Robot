@@ -49,7 +49,7 @@ public final class Constants {
     REPLAY
   }
 
-  public static final int ServoHubCANID = 1;
+  public static final int ServoHubCANID = 45;
 
   public static final double loopPeriodSecs = 0.02;
 
@@ -112,8 +112,8 @@ public final class Constants {
           public static final double simI = 0;
           public static final double simD = 0.05;
 
-          public static final double leftLimit = Math.PI;
-          public static final double rightLimit = -Math.PI;
+          public static final double leftLimit = 0;
+          public static final double rightLimit = 0.96575;
           public static double currentLimit = 60;
 
           public static double motionMagicCruise = 100;
@@ -145,6 +145,9 @@ public final class Constants {
 
           public static final int minimumPulseWidth = 1000;
           public static final int maximumPulseWidth = 2000;
+
+          public static final int leftHoodServoHubPort = 2;
+          public static final int rightHoodServoHubPort = 0;
       }
       public static class Flywheel{
           public static final double simP = 10.5;
@@ -155,7 +158,7 @@ public final class Constants {
           public static double motionMagicCruise = 100;
           public static double motionMagicAccel = 50;
 
-          public static final double compP = 0;
+          public static final double compP = 13;
           public static final double compI = 0;
           public static final double compD = 0;
           public static final double compS = 0;
@@ -175,10 +178,10 @@ public final class Constants {
           public static double motionMagicCruise = 100;
           public static double motionMagicAccel = 50;
 
-          public static final double compP = 0;
+          public static final double compP = 14;
           public static final double compI = 0;
           public static final double compD = 0;
-          public static final double compS = 0;
+          public static final double compS = 15;
 
           public static final double gearRatio = 1.67;
           public static double currentLimit = 60;
@@ -196,23 +199,23 @@ public final class Constants {
       public static final double simS = 0.0;
 
       // Competition bot
-      public static final double compP = 0.0;
+      public static final double compP = 20;
       public static final double compI = 0.0;
       public static final double compD = 0.0;
-      public static final double compS = 0.0;
+      public static final double compS = 10;
 
       public static final int indexerCanID = 25;
 
-      public static final double rollerCurrentLimit = 60;
+      public static final double rollerCurrentLimit = 110;
       public static final double rollerConversionFactor = 1;
 
-      public static final double rollerMaxVelocity = 10;
-      public static final double rollerMaxAcceleration = 10;
+      public static final double rollerMaxVelocity = 100;
+      public static final double rollerMaxAcceleration = 200;
 
-      public static final double statusUpdateFrequency = 50;
+      public static final double statusUpdateFrequency = 20;
   }
   public static class Intake{
-      public static final int rollerMotorCANID = 0;
+      public static final int rollerMotorCANID = 50;
       public static final double RollerCurrentLimit = 40;
       public static final double RollerGearRatio = 0.75;
       public static final double RollerMotionMagicCruise = 0.0;
@@ -234,7 +237,7 @@ public final class Constants {
       public static final double PivotkS = 0.0;
       public static final double PivotkG = 0.0;
 
-      public static final double FrequencyUpdateRate = 50;
+      public static final double FrequencyUpdateRate = 20;
       public static double rollerRadius = Units.inchesToMeters(1);
   }
 

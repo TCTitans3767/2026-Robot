@@ -37,7 +37,7 @@ public class FlywheelIOCompetition implements FlywheelIO{
     public FlywheelIOCompetition(int CANID) {
         flywheelMotor = new TalonFX(CANID, Constants.SuperstructureCANBus);
 
-        flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         flywheelConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         flywheelConfig.Feedback.RotorToSensorRatio = Constants.Shooter.Flywheel.gearRatio;
         flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -64,6 +64,7 @@ public class FlywheelIOCompetition implements FlywheelIO{
 
     @Override
     public void updateInputs(FlywheelIOInputs inputs) {
+        BaseStatusSignal.refreshAll(velocityStatusSignal);
         switch (controlMode) {
             case POWER -> flywheelMotor.set(targetPower);
             case VELOCITY -> flywheelMotor.setControl(new MotionMagicVelocityTorqueCurrentFOC(targetVelocity));
