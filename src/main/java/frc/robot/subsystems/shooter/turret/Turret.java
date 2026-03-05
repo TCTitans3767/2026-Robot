@@ -43,7 +43,7 @@ public class Turret extends SubsystemBase {
         return inputs.currentVelocity;
     }
 
-    public void resetEncoder(double degrees) {
-        io.resetEncoder(Units.degreesToRotations(degrees));
+    public void resetEncoder(double rotations) {
+        io.resetEncoder(rotations);
     }
 }

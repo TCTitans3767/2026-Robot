@@ -93,7 +93,7 @@ public class Drivetrain extends SubsystemBase {
                             TunerConstants.FrontLeft.WheelRadius,
                             TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
                             WHEEL_COF,
-                            DCMotor.getKrakenX60Foc(1)
+                            DCMotor.getKrakenX60(1)
                                     .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
                             TunerConstants.FrontLeft.SlipCurrent,
                             1),
@@ -163,7 +163,7 @@ public class Drivetrain extends SubsystemBase {
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+                        new PIDConstants(0.0, 0.0, 0.0), new PIDConstants(0, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -326,7 +326,6 @@ public class Drivetrain extends SubsystemBase {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds) {
-        DrivetrainPublisher.setAcceptInputsSupplier(() -> false);
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
@@ -428,9 +427,9 @@ public class Drivetrain extends SubsystemBase {
     /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
-        if (Constants.currentMode == Constants.Mode.SIM) {
-            return Robot.driveSimulation.getSimulatedDriveTrainPose();
-        }
+//        if (Constants.currentMode == Constants.Mode.SIM) {
+//            return Robot.driveSimulation.getSimulatedDriveTrainPose();
+//        }
         return poseEstimator.getEstimatedPosition();
     }
 
@@ -490,15 +489,19 @@ public class Drivetrain extends SubsystemBase {
 
     private void receiveDriveInputs(DoubleSupplier xVel, DoubleSupplier yVel, DoubleSupplier thetaVel, BooleanSupplier isFieldCentric, BooleanSupplier acceptInputs) {
         if (acceptInputs.getAsBoolean()) {
-            if (isFieldCentric.getAsBoolean()) {
-                joystickDrive(xVel.getAsDouble(), yVel.getAsDouble(), thetaVel.getAsDouble());
-            } else {
-                robotCentricDrive(xVel.getAsDouble(), yVel.getAsDouble(), thetaVel.getAsDouble());
-            }
+                if (isFieldCentric.getAsBoolean()) {
+                    joystickDrive(xVel.getAsDouble(), yVel.getAsDouble(), -thetaVel.getAsDouble());
+                } else {
+                    robotCentricDrive(xVel.getAsDouble(), yVel.getAsDouble(), -thetaVel.getAsDouble());
+                }
 
             Logger.recordOutput("Drivetrain/drivetrain inputs", Arrays.toString(new Double[] {xVel.getAsDouble(), yVel.getAsDouble(), thetaVel.getAsDouble()}));
         } else {
-            joystickDrive(0, 0, 0);
+            if (DriverStation.isDSAttached()) {
+                if (!DriverStation.isAutonomousEnabled()) {
+                    joystickDrive(0, 0, 0);
+                }
+            }
         }
     }
 

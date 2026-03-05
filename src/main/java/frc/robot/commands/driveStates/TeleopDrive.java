@@ -15,7 +15,8 @@ import frc.robot.util.DrivetrainPublisher;
 public class TeleopDrive extends Command {
 
     public TeleopDrive() {
-        DrivetrainPublisher.setSuppliers(Robot.driverController::getLeftX,
+        DrivetrainPublisher.setSuppliers(
+                () -> -Robot.driverController.getLeftX(),
                 Robot.driverController::getLeftY,
                 Robot.driverController::getRightX,
                 () -> true

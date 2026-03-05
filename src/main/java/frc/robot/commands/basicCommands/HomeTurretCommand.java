@@ -1,9 +1,11 @@
 package frc.robot.commands.basicCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.turret.Turret;
+import org.littletonrobotics.junction.Logger;
 
 public class HomeTurretCommand extends Command {
 
@@ -23,13 +25,13 @@ public class HomeTurretCommand extends Command {
     @Override
     public void initialize() {
         previousEncoderReading = turret.getRotation();
-        turret.setPower(0.005);
+        turret.setPower(-0.2);
     }
 
     @Override
     public void execute() {
         this.newEncoderReading = this.turret.getRotation();
-        if (MathUtil.isNear(newEncoderReading, previousEncoderReading, 0.05)) {
+        if (MathUtil.isNear(newEncoderReading, previousEncoderReading, 0.005) && DriverStation.isDSAttached() && DriverStation.isEnabled()) {
             cyclesWithSameEncoderReading++;
         }
 
@@ -53,6 +55,7 @@ public class HomeTurretCommand extends Command {
         } else {
             System.out.println("Something went wrong and the the homing sequence for {" + turret.name + "} quit unexpectedly");
         }
+        turret.setPower(-0.005);
     }
 
     @Override

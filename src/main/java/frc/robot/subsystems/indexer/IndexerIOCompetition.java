@@ -41,7 +41,7 @@ public class IndexerIOCompetition implements IndexerIO{
     // Motor Setup
 
     public IndexerIOCompetition() {
-        indexerMotor = new TalonFX(Constants.Indexer.indexerCanID);
+        indexerMotor = new TalonFX(Constants.Indexer.indexerCanID, Constants.SuperstructureCANBus);
 
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimit = Constants.Indexer.rollerCurrentLimit;

@@ -5,6 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -34,10 +35,10 @@ public class FeederIOCompetition implements FeederIO{
     private final StatusSignal<Current> torqueStatusSignal;
 
     public FeederIOCompetition(int CANID) {
-        this.feederMotor = new TalonFX(CANID);
+        this.feederMotor = new TalonFX(CANID, Constants.SuperstructureCANBus);
 
         feederMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        feederMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        feederMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         feederMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         feederMotorConfig.CurrentLimits.StatorCurrentLimit = Constants.Shooter.Feeder.currentLimit;
         feederMotorConfig.Feedback.RotorToSensorRatio = Constants.Shooter.Feeder.gearRatio;
@@ -50,6 +51,10 @@ public class FeederIOCompetition implements FeederIO{
         motionMagicConfig.MotionMagicAcceleration = Constants.Shooter.Feeder.motionMagicAccel;
         motionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.Feeder.motionMagicCruise;
 
+        feederMotor.getConfigurator().apply(feederMotorConfig);
+        feederMotor.getConfigurator().apply(slot0Config);
+        feederMotor.getConfigurator().apply(motionMagicConfig);
+
         velocityStatusSignal = feederMotor.getVelocity();
         amperageStatusSignal = feederMotor.getStatorCurrent();
         torqueStatusSignal = feederMotor.getTorqueCurrent();
@@ -61,7 +66,7 @@ public class FeederIOCompetition implements FeederIO{
     public void updateInputs(FeederIOInputs inputs) {
         switch (this.controlMode) {
             case POWER -> this.feederMotor.set(targetPower);
-            case VELOCITY -> this.feederMotor.setControl(new MotionMagicVelocityVoltage(targetVelocity));
+            case VELOCITY -> this.feederMotor.setControl(new MotionMagicVelocityTorqueCurrentFOC(targetVelocity));
         }
 
         inputs.currentAmperage = amperageStatusSignal.getValueAsDouble();

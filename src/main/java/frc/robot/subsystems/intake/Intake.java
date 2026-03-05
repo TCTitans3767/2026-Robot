@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         if (runRollerWithSupplier) {
-            this.setRollerVelocity(this.velocitySupplier.getAsDouble());
+            this.setRollerVelocityWithoutTurningOffSupplier(this.velocitySupplier.getAsDouble());
         }
 
         io.updateInputs(inputs);
@@ -40,6 +40,9 @@ public class Intake extends SubsystemBase {
     }
     public void setRollerVelocity(double velocity) {
         runRollerWithSupplier = false;
+        io.setRollerVelocity(velocity);
+    }
+    private void setRollerVelocityWithoutTurningOffSupplier(double velocity) {
         io.setRollerVelocity(velocity);
     }
     public void setRollerVelocitySupplier(DoubleSupplier velocitySupplier) {
