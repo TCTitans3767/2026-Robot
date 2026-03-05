@@ -64,13 +64,13 @@ public class ShooterStack {
 
 
         if (pointToTarget) {
-            turret.setRotation(Units.radiansToRotations(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget)));
+            turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
         }
-        if (shootingEnabled) {
-            hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
-        } else {
-            hood.setAngle(Constants.Shooter.Hood.minimumPulseWidth);
-        }
+//        if (shootingEnabled) {
+//            hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
+//        } else {
+//            hood.setAngle(Constants.Shooter.Hood.minimumPulseWidth);
+//        }
 
         if (shootingEnabled) {
 //            System.out.println("shooting enabled");
@@ -91,11 +91,11 @@ public class ShooterStack {
         }
 
         if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) || !shootingEnabled) {
-            feeder.setFeedVelocity(0);
+//            feeder.setFeedVelocity(-10);
         } else if ((flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) && shootingEnabled) {
             feeder.setFeedVelocity(50);
         } else {
-            feeder.setFeedVelocity(0);
+//            feeder.setFeedVelocity(-10);
         }
 
         if (Constants.currentMode == Constants.Mode.SIM) {

@@ -5,6 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -77,7 +78,7 @@ public class TurretIOCompetition implements TurretIO{
 
         switch (this.controlMode) {
             case POWER -> turretMotor.set(targetPower);
-            case POSITION -> turretMotor.setControl(new MotionMagicTorqueCurrentFOC(this.targetRotation));
+            case POSITION -> turretMotor.setControl(new MotionMagicExpoTorqueCurrentFOC(this.targetRotation).withFeedForward(calculateAdditionalFeedforward()));
         }
 
         inputs.targetRotation = this.targetRotation;
@@ -146,5 +147,9 @@ public class TurretIOCompetition implements TurretIO{
     @Override
     public void resetEncoder(double rotations) {
         turretMotor.setPosition(rotations);
+    }
+
+    private double calculateAdditionalFeedforward() {
+        return Constants.Shooter.turretSpringFeedforwardInterpolationMap.get(this.targetRotation);
     }
 }

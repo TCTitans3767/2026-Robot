@@ -36,7 +36,7 @@ public class Turret extends SubsystemBase {
     }
 
     public double getRotationFieldCoordinates() {
-        return inputs.currentRotation - Robot.drivetrain.getRotation().getRadians();
+        return inputs.currentRotation - Robot.drivetrain.getRotation().getDegrees();
     }
 
     public double getVelocity() {

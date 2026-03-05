@@ -92,4 +92,16 @@ public class ShooterArray extends SubsystemBase{
         });
     }
 
+    public void setFlywheelVelocity(double velocity) {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.setFlywheelSpeed(velocity);
+        });
+    }
+
+    public void setFeederVelocity(double velocity) {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.setFeederPower(-10);
+        });
+    }
+
 }

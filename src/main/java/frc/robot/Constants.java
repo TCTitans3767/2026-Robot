@@ -90,6 +90,7 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap simFlywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap hoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
+      public static final InterpolatingDoubleTreeMap turretSpringFeedforwardInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
       public static double signalUpdateFrequency = 20;
       public static double turretLeadCorrectionConstant = 0.05;
@@ -102,6 +103,8 @@ public final class Constants {
         simFlywheelVelocityInterpolationMap.put(2.0, 42.0);
         simFlywheelVelocityInterpolationMap.put(3.0, 48.0);
         simFlywheelVelocityInterpolationMap.put(4.5, 50.0);
+
+        turretSpringFeedforwardInterpolationMap.put(0.0, 3.0);
       }
 
       // meters
