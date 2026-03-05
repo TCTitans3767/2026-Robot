@@ -55,7 +55,7 @@ public class HomeTurretCommand extends Command {
         } else {
             System.out.println("Something went wrong and the the homing sequence for {" + turret.name + "} quit unexpectedly");
         }
-        turret.setRotation(0.05);
+        turret.setPower(-0.005);
     }
 
     @Override

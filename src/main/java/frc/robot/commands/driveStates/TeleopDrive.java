@@ -16,8 +16,8 @@ public class TeleopDrive extends Command {
 
     public TeleopDrive() {
         DrivetrainPublisher.setSuppliers(
+                () -> -Robot.driverController.getLeftX(),
                 Robot.driverController::getLeftY,
-                Robot.driverController::getLeftX,
                 Robot.driverController::getRightX,
                 () -> true
         );

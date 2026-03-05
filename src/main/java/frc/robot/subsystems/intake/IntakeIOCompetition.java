@@ -58,7 +58,7 @@ public class IntakeIOCompetition implements IntakeIO{
         this.pivotMotorMotionMagicConfig = new MotionMagicConfigs();
 
         rollerMotorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        rollerMotorConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        rollerMotorConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         rollerMotorConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         rollerMotorConfiguration.CurrentLimits.StatorCurrentLimit = Constants.Intake.RollerCurrentLimit;
         rollerMotorConfiguration.Feedback.RotorToSensorRatio = Constants.Intake.RollerGearRatio;

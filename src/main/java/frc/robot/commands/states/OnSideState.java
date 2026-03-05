@@ -1,10 +1,13 @@
 package frc.robot.commands.states;
 
 import ControlAnnotations.State;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.TriggerBoard;
+import frc.robot.commands.basicCommands.intake.IntakeRollerDriveVelocityMatch;
 import frc.robot.commands.transitions.OnSideEnterTransition;
 import frc.robot.subsystems.robotControl.RobotControl;
 import frc.robot.util.HubState;
@@ -22,6 +25,8 @@ public class OnSideState extends Command {
     @Override
     public void initialize() {
         Robot.indexer.setIndexVelocity(15);
+        Robot.intake.setPivotPosition(0);
+        Robot.intake.setRollerVelocitySupplier(() -> MathUtil.clamp(Math.sqrt(((Robot.drivetrain.getChassisSpeeds().vxMetersPerSecond * Robot.drivetrain.getChassisSpeeds().vxMetersPerSecond) + (Robot.drivetrain.getChassisSpeeds().vyMetersPerSecond * Robot.drivetrain.getChassisSpeeds().vyMetersPerSecond)) / Constants.Intake.rollerRadius) / (2 * Math.PI), 40.0, 100));
     }
 
     @Override

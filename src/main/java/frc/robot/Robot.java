@@ -89,6 +89,7 @@ public class Robot extends LoggedRobot {
   public static Indexer indexer;
   public static Intake intake;
   public static LimelightCamera shooterLimelight;
+  public static LimelightCamera swerveLimelight;
 
   public static GenericNTButton hubStateButton = new GenericNTButton("Hub State", NetworkTableInstance.getDefault().getTable("Hub State"), true);
 
@@ -187,7 +188,8 @@ public class Robot extends LoggedRobot {
               ));
               indexer = new Indexer(new IndexerIOCompetition());
               intake = new Intake(new IntakeIOCompetition());
-//              shooterLimelight = new LimelightCamera("Shooter Limelight", new Pose3d(Units.inchesToMeters(-11.5), Units.inchesToMeters(-12.75), Units.inchesToMeters(18.75), new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(145))), LimelightCamera.limelightPipeline.APRIL_TAG);
+              shooterLimelight = new LimelightCamera("limelight-turret", new Pose3d(Units.inchesToMeters(-12.140), Units.inchesToMeters(-12.745), Units.inchesToMeters(19.296), new Rotation3d(0, 0, Units.degreesToRadians(145))), LimelightCamera.limelightPipeline.APRIL_TAG);
+//              swerveLimelight = new LimelightCamera("limelight-swerve", new Pose3d(Units.inchesToMeters(6.833), Units.inchesToMeters(11.255), Units.inchesToMeters(8.691), new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-35))), LimelightCamera.limelightPipeline.APRIL_TAG);
               break;
 
           case SIM:
@@ -268,7 +270,6 @@ public class Robot extends LoggedRobot {
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
     RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
-//    RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }
 

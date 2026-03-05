@@ -2,6 +2,7 @@ package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,6 +33,7 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
     private LimelightSettings.ImuMode currentIMUMode;
     private Pose3d mostRecentPoseEstimate = new Pose3d();
     private boolean isMostRecentPoseEstimateValid = false;
+    private double mostRecentAmbiguity = 0;
     private ArrayList<Integer> currentVisibleTags;
 
     private final String limelightName;
@@ -61,6 +63,7 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
     public void updateInputs(LimelightCameraIOInputs inputs) {
         inputs.isMostRecentEstimateValid = this.isMostRecentPoseEstimateValid;
         inputs.mostRecentPoseEstimate = this.mostRecentPoseEstimate;
+        inputs.mostRecentAmbiguity = this.mostRecentAmbiguity;
     }
 
     @Override
@@ -92,8 +95,8 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
 
     private void aprilTagPeriodic() {
         if (megaTag1Estimations < Constants.Limelights.minMegaTagOneEstimations) {
-            if (this.currentIMUMode != LimelightSettings.ImuMode.ExternalImu) {
-                camera.getSettings().withImuMode(LimelightSettings.ImuMode.ExternalImu);
+            if (this.currentIMUMode != LimelightSettings.ImuMode.SyncInternalImu) {
+                camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu);
             }
 
             Orientation3d robotOrientation = new Orientation3d(
@@ -109,18 +112,28 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
 
             poseEstimate.ifPresent((estimate) -> {
                 this.mostRecentPoseEstimate = estimate.pose;
-                if (!(estimate.getMaxTagAmbiguity() > Constants.Limelights.maxAmbiguity)) {
-                    Robot.drivetrain.addVisionMeasurement(estimate.pose.toPose2d(), Timer.getFPGATimestamp(), VecBuilder.fill(0.2, 0.2, 0.3));
+                this.mostRecentAmbiguity = estimate.getAvgTagAmbiguity();
+                if (!(estimate.getAvgTagAmbiguity() > Constants.Limelights.maxAmbiguity)) {
+                    Robot.drivetrain.addVisionMeasurement(estimate.pose.toPose2d(), Timer.getFPGATimestamp(), VecBuilder.fill(0, 0, 0));
+                    megaTag1Estimations++;
                     this.isMostRecentPoseEstimateValid = true;
                 } else {
                     this.isMostRecentPoseEstimateValid = false;
                 }
-                megaTag1Estimations++;
             });
         } else {
-            if (this.currentIMUMode != LimelightSettings.ImuMode.InternalImu) {
-                camera.getSettings().withImuMode(LimelightSettings.ImuMode.InternalImu);
+            if (this.currentIMUMode != LimelightSettings.ImuMode.ExternalImu) {
+                camera.getSettings().withImuMode(LimelightSettings.ImuMode.ExternalImu);
             }
+
+            Orientation3d robotOrientation = new Orientation3d(
+                    new Rotation3d(0, 0, Robot.drivetrain.getRotation().getRadians()),
+                    Robot.drivetrain.getPigeon2().getAngularVelocityZWorld().getValue(),
+                    Robot.drivetrain.getPigeon2().getAngularVelocityYWorld().getValue(),
+                    Robot.drivetrain.getPigeon2().getAngularVelocityXWorld().getValue()
+            );
+
+            camera.getSettings().withRobotOrientation(robotOrientation).save();
 
             Optional<PoseEstimate> poseEstimate = LimelightPoseEstimator.BotPose.BLUE_MEGATAG2.get(this.camera);
 

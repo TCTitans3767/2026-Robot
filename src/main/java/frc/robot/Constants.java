@@ -81,8 +81,8 @@ public final class Constants {
   }
 
   public static class Limelights {
-      public static final int minMegaTagOneEstimations = 10;
-      public static final double maxAmbiguity = 0.1;
+      public static final int minMegaTagOneEstimations = 30;
+      public static final double maxAmbiguity = 0.35;
   }
 
   public static class Shooter {
@@ -91,7 +91,7 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap hoodAngleInterpolationMap = new InterpolatingDoubleTreeMap();
       public static final InterpolatingDoubleTreeMap flywheelVelocityInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
-      public static double signalUpdateFrequency = 50;
+      public static double signalUpdateFrequency = 20;
       public static double turretLeadCorrectionConstant = 0.05;
 
       static {
@@ -218,20 +218,20 @@ public final class Constants {
       public static final int rollerMotorCANID = 50;
       public static final double RollerCurrentLimit = 40;
       public static final double RollerGearRatio = 0.75;
-      public static final double RollerMotionMagicCruise = 0.0;
-      public static final double RollerMotionMagicAccel = 0.0;
-      public static final double RollerkP = 0.0;
+      public static final double RollerMotionMagicCruise = 100;
+      public static final double RollerMotionMagicAccel = 200;
+      public static final double RollerkP = 0.6;
       public static final double RollerkI = 0.0;
       public static final double RollerkD = 0.0;
-      public static final double RollerkS = 0.0;
+      public static final double RollerkS = 2.1;
       public static final double RollerkG = 0.0;
 
       public static final int pivotMotorCANID = 40;
       public static final double PivotCurrentLimit = 40;
       public static final double PivotGearRatio = 11.555;
-      public static final double PivotMotionMagicCruise = 0.0;
-      public static final double PivotMotionMagicAccel = 0.0;
-      public static final double PivotkP = 0.0;
+      public static final double PivotMotionMagicCruise = 100;
+      public static final double PivotMotionMagicAccel = 200;
+      public static final double PivotkP = 10.0;
       public static final double PivotkI = 0.0;
       public static final double PivotkD = 0.0;
       public static final double PivotkS = 0.0;

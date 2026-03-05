@@ -11,6 +11,7 @@ public interface LimelightCameraIO {
         public Pose3d mostRecentPoseEstimate = new Pose3d();
         public double mostRecentEstimateTimestamp = 0;
         public boolean isMostRecentEstimateValid = false;
+        public double mostRecentAmbiguity = 0;
         public int[] visibleTags;
     }
 

@@ -81,7 +81,7 @@ public class ShooterStack {
 //                    : 0
 //            );
         } else {
-            flywheel.setVelocity(idleVelocity);
+//            flywheel.setVelocity(idleVelocity);
             flywheel.setVelocity(0);
         }
 
@@ -91,7 +91,7 @@ public class ShooterStack {
         }
 
         if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) || !shootingEnabled) {
-            feeder.setFeedSpeed(0);
+            feeder.setFeedVelocity(0);
         } else if ((flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) && shootingEnabled) {
             feeder.setFeedVelocity(50);
         } else {
