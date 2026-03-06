@@ -235,7 +235,7 @@ public final class Constants {
       public static final double PivotGearRatio = 11.555;
       public static final double PivotMotionMagicCruise = 100;
       public static final double PivotMotionMagicAccel = 200;
-      public static final double PivotkP = 10.0;
+      public static final double PivotkP = 200.0;
       public static final double PivotkI = 0.0;
       public static final double PivotkD = 0.0;
       public static final double PivotkS = 0.0;

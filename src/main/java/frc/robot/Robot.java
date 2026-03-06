@@ -269,7 +269,7 @@ public class Robot extends LoggedRobot {
 
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
-//    RobotControl.setCurrentMode(RobotStates.onSideState);
+    RobotControl.setCurrentMode(RobotStates.onSideState);
 //    drivetrain.setPose(new Pose2d(0, 2, Rotation2d.fromDegrees(32)));
   }
 
@@ -289,26 +289,6 @@ public class Robot extends LoggedRobot {
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
-    if (Robot.driverController.getLeftTriggerAxis() > 0.5) {
-      // Intake mode
-      Robot.shooterArray.enableShooting(false);
-      Robot.intake.setRollerVelocity(50);
-      Robot.indexer.setIndexVelocity(15);
-      Robot.intake.setPivotPosition(0);
-      Robot.shooterArray.setFeederVelocity(-10);
-    } else if (Robot.driverController.getRightTriggerAxis() > 0.5) {
-      // Shoot mode
-      Robot.shooterArray.enableShooting(true);
-      Robot.intake.setRollerVelocity(50);
-      Robot.indexer.setIndexVelocity(15);
-//            Robot.intake.setPivotPosition(0.15);
-    } else {
-      // Neutral mode
-      Robot.shooterArray.enableShooting(false);
-      Robot.intake.setRollerVelocity(0);
-      Robot.indexer.setIndexVelocity(0);
-      Robot.shooterArray.setFeederVelocity(0);
-    }
   }
 
   /** This function is called once when the robot is disabled. */
@@ -352,7 +332,28 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if (Robot.driverController.getLeftTriggerAxis() > 0.5) {
+      // Intake mode
+      Robot.shooterArray.enableShooting(false);
+      Robot.intake.setRollerVelocity(50);
+      Robot.indexer.setIndexVelocity(15);
+      Robot.intake.setPivotPosition(0);
+      Robot.shooterArray.setFeederVelocity(-10);
+    } else if (Robot.driverController.getRightTriggerAxis() > 0.5) {
+      // Shoot mode
+      Robot.shooterArray.enableShooting(true);
+      Robot.intake.setRollerVelocity(50);
+      Robot.indexer.setIndexVelocity(15);
+//            Robot.intake.setPivotPosition(0.15);
+    } else {
+      // Neutral mode
+      Robot.shooterArray.enableShooting(false);
+      Robot.intake.setRollerVelocity(0);
+      Robot.indexer.setIndexVelocity(0);
+      Robot.shooterArray.setFeederVelocity(0);
+    }
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override

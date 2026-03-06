@@ -53,11 +53,6 @@ public class OnSideState extends Command {
 //            RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
 //            return;
 //        }
-        active();
-        System.out.println("Ran execute from OnSideState");
-    }
-
-    public void active() {
         if (Robot.driverController.getLeftTriggerAxis() > 0.5) {
             // Intake mode
             Robot.shooterArray.enableShooting(false);
@@ -76,7 +71,12 @@ public class OnSideState extends Command {
             Robot.intake.setRollerVelocity(0);
             Robot.indexer.setIndexVelocity(0);
         }
-        System.out.println("Ran Active function from OnSideState");
+//        System.out.println("Ran Active function from OnSideState");
+//        active();
+//        System.out.println("Ran execute from OnSideState");
+    }
+
+    public void active() {
     }
 
     public void inactive() {
