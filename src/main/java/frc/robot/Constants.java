@@ -203,10 +203,10 @@ public final class Constants {
       public static final double simS = 0.0;
 
       // Competition bot
-      public static final double compP = 20;
+      public static final double compP = 15;
       public static final double compI = 0.0;
       public static final double compD = 0.0;
-      public static final double compS = 10;
+      public static final double compS = 4;
 
       public static final int indexerCanID = 25;
 
@@ -227,19 +227,20 @@ public final class Constants {
       public static final double RollerkP = 0.6;
       public static final double RollerkI = 0.0;
       public static final double RollerkD = 0.0;
-      public static final double RollerkS = 2.1;
+      public static final double RollerkS = .6;
       public static final double RollerkG = 0.0;
 
       public static final int pivotMotorCANID = 40;
-      public static final double PivotCurrentLimit = 40;
+      public static final double PivotCurrentLimit = 60;
       public static final double PivotGearRatio = 11.555;
       public static final double PivotMotionMagicCruise = 100;
       public static final double PivotMotionMagicAccel = 200;
-      public static final double PivotkP = 200.0;
+      public static final double PivotkP = 3.8;
       public static final double PivotkI = 0.0;
       public static final double PivotkD = 0.0;
-      public static final double PivotkS = 0.0;
-      public static final double PivotkG = 0.0;
+      public static final double PivotkS = 0.9;
+      public static final double PivotkG = 0.5;
+      public static final double PivotkV = 0.6;
 
       public static final double FrequencyUpdateRate = 20;
       public static double rollerRadius = Units.inchesToMeters(1);

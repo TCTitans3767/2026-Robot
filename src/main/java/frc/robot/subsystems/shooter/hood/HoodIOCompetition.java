@@ -1,8 +1,10 @@
 package frc.robot.subsystems.shooter.hood;
 
+import com.revrobotics.ResetMode;
 import com.revrobotics.servohub.ServoChannel;
+import com.revrobotics.servohub.ServoHub;
 import com.revrobotics.servohub.config.ServoChannelConfig;
-import edu.wpi.first.math.MathUtil;
+import com.revrobotics.servohub.config.ServoHubConfig;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -13,7 +15,7 @@ public class HoodIOCompetition implements HoodIO{
     private final ServoChannel servo;
 
     private double angleTarget = 0;
-    private int servoPulseWidth = 1000;
+    private int targetPulseWidth = 1000;
 
     public HoodIOCompetition(int servoChannel) {
         this.servoChannel = servoChannel;
@@ -23,6 +25,12 @@ public class HoodIOCompetition implements HoodIO{
         channelConfig.disableBehavior(ServoChannelConfig.BehaviorWhenDisabled.kDoNotSupplyPower);
         channelConfig.pulseRange(Constants.Shooter.Hood.minimumPulseWidth, 1500, Constants.Shooter.Hood.maximumPulseWidth);
 
+        ServoHubConfig servoHubConfig = new ServoHubConfig();
+
+        servoHubConfig.apply(ServoChannel.ChannelId.fromInt(servoChannel), channelConfig);
+
+        Robot.servoHub.configure(servoHubConfig, ResetMode.kNoResetSafeParameters);
+
         this.servo.setPowered(true);
 
         this.servo.setEnabled(true);
@@ -30,10 +38,10 @@ public class HoodIOCompetition implements HoodIO{
 
     @Override
     public void updateInputs(HoodIOInputs inputs) {
-        servo.setPulseWidth(MathUtil.clamp(servoPulseWidth, Constants.Shooter.Hood.minimumPulseWidth, Constants.Shooter.Hood.maximumPulseWidth));
+        this.servo.setPulseWidth(this.targetPulseWidth);
 
         inputs.targetAngle = this.angleTarget;
-        inputs.commandedPulseWidth = this.servoPulseWidth;
+        inputs.commandedPulseWidth = this.targetPulseWidth;
         inputs.currentAngle = this.servo.getPulseWidth();
     }
 
@@ -41,8 +49,8 @@ public class HoodIOCompetition implements HoodIO{
     public void setAngle(double angle) {
 //        this.angleTarget = angle;
 //        this.servoPulseWidth = angleToPulseWidth(angle);
-        this.servoPulseWidth = (int) angle;
-   }
+        this.targetPulseWidth = (int) angle;
+    }
 
     // TODO: give this function an actual output that does what it should
     private int angleToPulseWidth(double angle) {

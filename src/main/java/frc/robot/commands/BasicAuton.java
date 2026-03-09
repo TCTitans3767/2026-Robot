@@ -15,8 +15,8 @@ public class BasicAuton extends SequentialCommandGroup {
                 new InstantCommand(() -> Robot.drivetrain.setPose(new Pose2d(new Translation2d(), new Rotation2d(Units.degreesToRadians(180))))),
                 new InstantCommand(() -> {
                     Robot.intake.setPivotPosition(0);
-                    Robot.intake.setRollerVelocity(20);
-                    Robot.indexer.setIndexVelocity(20);
+                    Robot.intake.setRollerSpeed(0.2);
+                    Robot.indexer.setIndexSpeed(0.20);
                     Robot.shooterArray.enableShooting(true);
                 })
         );

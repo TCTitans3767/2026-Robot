@@ -104,4 +104,9 @@ public class ShooterArray extends SubsystemBase{
         });
     }
 
+    public void setHoodAngle(int angle) {
+        shooterStacks.forEach((shooterStackName, shooterStack) -> {
+            shooterStack.setHoodAngle(angle);
+        });
+    }
 }
