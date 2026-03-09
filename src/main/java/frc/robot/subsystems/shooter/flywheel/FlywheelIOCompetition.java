@@ -39,7 +39,7 @@ public class FlywheelIOCompetition implements FlywheelIO{
 
         flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         flywheelConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        flywheelConfig.Feedback.RotorToSensorRatio = Constants.Shooter.Flywheel.gearRatio;
+        flywheelConfig.Feedback.SensorToMechanismRatio = Constants.Shooter.Flywheel.gearRatio;
         flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         flywheelConfig.CurrentLimits.StatorCurrentLimit = Constants.Shooter.Flywheel.currentLimit;
 
@@ -47,6 +47,7 @@ public class FlywheelIOCompetition implements FlywheelIO{
         flywheelSlot0Config.kI = Constants.Shooter.Flywheel.compI;
         flywheelSlot0Config.kD = Constants.Shooter.Flywheel.compD;
         flywheelSlot0Config.kS = Constants.Shooter.Flywheel.compS;
+        flywheelSlot0Config.kV = Constants.Shooter.Flywheel.compV;
 
         flywheelMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.Flywheel.motionMagicCruise;
         flywheelMotionMagicConfig.MotionMagicAcceleration = Constants.Shooter.Flywheel.motionMagicAccel;

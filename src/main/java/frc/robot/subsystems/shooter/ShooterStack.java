@@ -61,6 +61,7 @@ public class ShooterStack {
         Logger.recordOutput(name + " Distance To Target", distanceToTarget);
         double targetTurretRotation = calculateTurretRotation();
         double angleToTarget = targetTurretRotation - drivetrain.getRotation().getRadians();
+        Logger.recordOutput(name + "shooting enabled", this.shootingEnabled);
 
 
         if (pointToTarget) {
@@ -74,7 +75,7 @@ public class ShooterStack {
 
         if (shootingEnabled) {
 //            System.out.println("shooting enabled");
-            flywheel.setVelocity(50);
+            flywheel.setVelocity(62);
 //            flywheel.setVelocity(
 //                    flywheelMap.get(distanceToTarget) != null ?
 //                    flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection((angleToTarget)))
@@ -90,12 +91,13 @@ public class ShooterStack {
             return;
         }
 
+
         if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) || !shootingEnabled) {
-//            feeder.setFeedVelocity(-10);
+            feeder.setFeedVelocity(-10);
         } else if ((flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) && shootingEnabled) {
-            feeder.setFeedVelocity(50);
+            feeder.setFeedVelocity(35);
         } else {
-//            feeder.setFeedVelocity(-10);
+            feeder.setFeedVelocity(-10);
         }
 
         if (Constants.currentMode == Constants.Mode.SIM) {

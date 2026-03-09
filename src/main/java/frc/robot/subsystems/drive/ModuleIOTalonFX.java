@@ -183,7 +183,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   public void setDriveOpenLoop(double output) {
     driveTalon.setControl(
             switch (constants.DriveMotorClosedLoopOutput) {
-              case Voltage -> voltageRequest.withOutput(output);
+              case Voltage -> voltageRequest.withOutput(output).withEnableFOC(false);
               case TorqueCurrentFOC -> torqueCurrentRequest.withOutput(output);
             });
   }
@@ -192,7 +192,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   public void setTurnOpenLoop(double output) {
     turnTalon.setControl(
             switch (constants.SteerMotorClosedLoopOutput) {
-              case Voltage -> voltageRequest.withOutput(output);
+              case Voltage -> voltageRequest.withOutput(output).withEnableFOC(false);
               case TorqueCurrentFOC -> torqueCurrentRequest.withOutput(output);
             });
   }
@@ -203,7 +203,7 @@ public class ModuleIOTalonFX implements ModuleIO {
             Units.radiansToRotations(wheelVelocityRadPerSec) * constants.DriveMotorGearRatio;
     driveTalon.setControl(
             switch (constants.DriveMotorClosedLoopOutput) {
-              case Voltage -> velocityVoltageRequest.withVelocity(motorVelocityRotPerSec);
+              case Voltage -> velocityVoltageRequest.withVelocity(motorVelocityRotPerSec).withEnableFOC(false);
               case TorqueCurrentFOC -> velocityTorqueCurrentRequest.withVelocity(motorVelocityRotPerSec);
             });
   }
@@ -212,7 +212,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   public void setTurnPosition(Rotation2d rotation) {
     turnTalon.setControl(
             switch (constants.SteerMotorClosedLoopOutput) {
-              case Voltage -> positionVoltageRequest.withPosition(rotation.getRotations());
+              case Voltage -> positionVoltageRequest.withPosition(rotation.getRotations()).withEnableFOC(false);
               case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(rotation.getRotations());
             });
   }

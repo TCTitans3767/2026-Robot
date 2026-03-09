@@ -5,6 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -92,6 +93,7 @@ public class IntakeIOCompetition implements IntakeIO{
         pivotMotorSlot0Config.kD = Constants.Intake.PivotkD;
         pivotMotorSlot0Config.kS = Constants.Intake.PivotkS;
         pivotMotorSlot0Config.kG = Constants.Intake.PivotkG;
+        pivotMotorSlot0Config.kV = Constants.Intake.PivotkV;
 
         pivotMotor.getConfigurator().apply(pivotMotorConfiguration);
         pivotMotor.getConfigurator().apply(pivotMotorMotionMagicConfig);
@@ -139,6 +141,11 @@ public class IntakeIOCompetition implements IntakeIO{
             }
             case POSITION -> {
                 pivotMotor.setControl(new MotionMagicVoltage(pivotTargetPosition));
+//                if (pivotMotorPosition.getValueAsDouble() < 0.18) {
+//                    pivotMotor.setControl(new MotionMagicExpoVoltage(pivotTargetPosition).withFeedForward(50));
+//                } else {
+//                    pivotMotor.setControl(new MotionMagicVoltage(pivotTargetPosition));
+//                }
             }
             case VELOCITY -> {
                 break;
@@ -170,7 +177,7 @@ public class IntakeIOCompetition implements IntakeIO{
 
     @Override
     public void setRollerSpeed(double velocity) {
-        this.rollerControlMode = ControlMode.VELOCITY;
+        this.rollerControlMode = ControlMode.POWER;
         rollerTargetPower = velocity;
     }
 

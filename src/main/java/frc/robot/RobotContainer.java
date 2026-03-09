@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.BasicAuton;
 import frc.robot.commands.PanicCommand;
 import frc.robot.commands.SetMode;
 import frc.robot.commands.basicCommands.exampleCommands.ExampleCommand;
@@ -51,6 +52,8 @@ public class RobotContainer {
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    autoChooser.addDefaultOption("Basic Auto", new BasicAuton());
 
     // Configure the button bindings
     configureButtonBindings();

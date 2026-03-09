@@ -288,12 +288,22 @@ public class Drivetrain extends SubsystemBase {
         // Square rotation value for more precise control
         omega = Math.copySign(omega * omega, omega);
 
+        ChassisSpeeds speeds;
+
         // Convert to field relative speeds & send command
-        ChassisSpeeds speeds =
-                new ChassisSpeeds(
-                        linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),
-                        linearVelocity.getY() * getMaxLinearSpeedMetersPerSec(),
-                        omega * getMaxAngularSpeedRadPerSec());
+        if (Robot.getAlliance() == Alliance.Red) {
+            speeds =
+                    new ChassisSpeeds(
+                            linearVelocity.getX() * getMaxLinearSpeedMetersPerSec() * 0.5,
+                            linearVelocity.getY() * getMaxLinearSpeedMetersPerSec() * 0.5,
+                            omega * getMaxAngularSpeedRadPerSec() * 0.5);
+        } else {
+            speeds =
+                    new ChassisSpeeds(
+                            -linearVelocity.getX() * getMaxLinearSpeedMetersPerSec() * 0.5,
+                            -linearVelocity.getY() * getMaxLinearSpeedMetersPerSec() * 0.5,
+                            omega * getMaxAngularSpeedRadPerSec() * 0.5);
+        }
         boolean isFlipped =
                 DriverStation.getAlliance().isPresent()
                         && DriverStation.getAlliance().get() == Alliance.Red;
