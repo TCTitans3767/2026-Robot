@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -78,7 +79,7 @@ public class TurretIOCompetition implements TurretIO{
 
         switch (this.controlMode) {
             case POWER -> turretMotor.set(targetPower);
-            case POSITION -> turretMotor.setControl(new MotionMagicExpoTorqueCurrentFOC(this.targetRotation).withFeedForward(calculateAdditionalFeedforward()));
+            case POSITION -> turretMotor.setControl(new MotionMagicExpoVoltage(this.targetRotation).withFeedForward(calculateAdditionalFeedforward()));
         }
 
         inputs.targetRotation = this.targetRotation;

@@ -3,6 +3,7 @@ package frc.robot.subsystems.limelight;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -97,13 +98,12 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
         if (megaTag1Estimations < Constants.Limelights.minMegaTagOneEstimations) {
             if (this.currentIMUMode != LimelightSettings.ImuMode.SyncInternalImu) {
                 camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu);
+                this.currentIMUMode =  LimelightSettings.ImuMode.SyncInternalImu;
             }
 
             Orientation3d robotOrientation = new Orientation3d(
-                    Robot.drivetrain.getPigeon2().getRotation3d(),
-                    Robot.drivetrain.getPigeon2().getAngularVelocityZWorld().getValue(),
-                    Robot.drivetrain.getPigeon2().getAngularVelocityYWorld().getValue(),
-                    Robot.drivetrain.getPigeon2().getAngularVelocityXWorld().getValue()
+                    new Rotation3d(Robot.drivetrain.getRotation()),
+                    new AngularVelocity3d(Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0))
             );
 
             camera.getSettings().withRobotOrientation(robotOrientation).save();
@@ -122,18 +122,19 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
                 }
             });
         } else {
-            if (this.currentIMUMode != LimelightSettings.ImuMode.ExternalImu) {
-                camera.getSettings().withImuMode(LimelightSettings.ImuMode.ExternalImu);
+            if (this.currentIMUMode != LimelightSettings.ImuMode.InternalImu) {
+                camera.getSettings().withImuMode(LimelightSettings.ImuMode.InternalImu);
+                this.currentIMUMode = LimelightSettings.ImuMode.InternalImu;
             }
 
-            Orientation3d robotOrientation = new Orientation3d(
-                    new Rotation3d(0, 0, Robot.drivetrain.getRotation().getRadians()),
-                    Robot.drivetrain.getPigeon2().getAngularVelocityZWorld().getValue(),
-                    Robot.drivetrain.getPigeon2().getAngularVelocityYWorld().getValue(),
-                    Robot.drivetrain.getPigeon2().getAngularVelocityXWorld().getValue()
-            );
-
-            camera.getSettings().withRobotOrientation(robotOrientation).save();
+//            Orientation3d robotOrientation = new Orientation3d(
+//                    new Rotation3d(0, 0, Robot.drivetrain.getRotation().getRadians()),
+//                    Robot.drivetrain.getPigeon2().getAngularVelocityZWorld().getValue(),
+//                    Robot.drivetrain.getPigeon2().getAngularVelocityYWorld().getValue(),
+//                    Robot.drivetrain.getPigeon2().getAngularVelocityXWorld().getValue()
+//            );
+//
+//            camera.getSettings().withRobotOrientation(robotOrientation).save();
 
             Optional<PoseEstimate> poseEstimate = LimelightPoseEstimator.BotPose.BLUE_MEGATAG2.get(this.camera);
 

@@ -31,46 +31,46 @@ public class OnSideState extends Command {
 
     @Override
     public void execute() {
-//        if (TriggerBoard.isRobotInNoShootingZone()) {
-//            inactive();
-//        } else {
-//            if (HubState.isActive()) {
-//                active();
-//            } else {
-//                inactive();
-//            }
-//        }
-//
-//        if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
-//            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
-//            return;
-//        } else if (HubState.timeRemainingInCurrentShift().get().in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
-//            RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
-//            return;
-//        }
-
-//        if (TriggerBoard.isInNeutralZone()) {
-//            RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
-//            return;
-//        }
-        if (Robot.driverController.getLeftTriggerAxis() > 0.5) {
-            // Intake mode
-            Robot.shooterArray.enableShooting(false);
-            Robot.intake.setRollerVelocity(50);
-            Robot.indexer.setIndexVelocity(15);
-            Robot.intake.setPivotPosition(0);
-        } else if (Robot.driverController.getRightTriggerAxis() > 0.5) {
-            // Shoot mode
-            Robot.shooterArray.enableShooting(true);
-            Robot.intake.setRollerVelocity(50);
-            Robot.indexer.setIndexVelocity(15);
-//            Robot.intake.setPivotPosition(0.15);
+        if (TriggerBoard.isRobotInNoShootingZone()) {
+            inactive();
         } else {
-            // Neutral mode
-            Robot.shooterArray.enableShooting(false);
-            Robot.intake.setRollerVelocity(0);
-            Robot.indexer.setIndexVelocity(0);
+            if (HubState.isActive()) {
+                active();
+            } else {
+                inactive();
+            }
         }
+
+        if (HubState.timeRemainingInCurrentShift().orElse(Seconds.of(Constants.shiftOffset + 1)).in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
+            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
+            return;
+        } else if (HubState.timeRemainingInCurrentShift().orElse(Seconds.of(Constants.shiftOffset + 1)).in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
+            RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
+            return;
+        }
+
+        if (TriggerBoard.isInNeutralZone()) {
+            RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
+            return;
+        }
+//        if (Robot.driverController.getLeftTriggerAxis() > 0.5) {
+//            // Intake mode
+//            Robot.shooterArray.enableShooting(false);
+//            Robot.intake.setRollerVelocity(50);
+//            Robot.indexer.setIndexVelocity(15);
+//            Robot.intake.setPivotPosition(0);
+//        } else if (Robot.driverController.getRightTriggerAxis() > 0.5) {
+//            // Shoot mode
+//            Robot.shooterArray.enableShooting(true);
+//            Robot.intake.setRollerVelocity(50);
+//            Robot.indexer.setIndexVelocity(15);
+//            Robot.intake.setPivotPosition(0.15);
+//        } else {
+//            // Neutral mode
+//            Robot.shooterArray.enableShooting(false);
+//            Robot.intake.setRollerVelocity(0);
+//            Robot.indexer.setIndexVelocity(0);
+//        }
 //        System.out.println("Ran Active function from OnSideState");
 //        active();
 //        System.out.println("Ran execute from OnSideState");

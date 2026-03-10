@@ -82,7 +82,7 @@ public final class Constants {
 
   public static class Limelights {
       public static final int minMegaTagOneEstimations = 30;
-      public static final double maxAmbiguity = 0.35;
+      public static final double maxAmbiguity = 0.3;
   }
 
   public static class Shooter {
