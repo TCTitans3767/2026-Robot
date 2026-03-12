@@ -22,11 +22,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.BasicAuton;
 import frc.robot.commands.PanicCommand;
-import frc.robot.commands.SetMode;
-import frc.robot.commands.basicCommands.exampleCommands.ExampleCommand;
 import frc.robot.subsystems.robotControl.RobotControl;
 import frc.robot.util.HubState;
-import frc.robot.utils.RobotTransitions;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import java.util.Map;
@@ -72,6 +69,10 @@ public class RobotContainer {
   private void setUpPathplannerCommands() {
 
       Map<String, Command> pathPlannerCommands = Map.ofEntries(
+              entry("Enable Intake", TriggerBoard.enableIntakeButtonAutonomous()),
+              entry("Disable Intake", TriggerBoard.disableIntakeButtonAutonomous()),
+              entry("Enable Shooting", TriggerBoard.enableShootingButtonAutonomous()),
+              entry("Disable Shooting", TriggerBoard.disableShootingButtonAutonomous())
       );
 
       NamedCommands.registerCommands(pathPlannerCommands);

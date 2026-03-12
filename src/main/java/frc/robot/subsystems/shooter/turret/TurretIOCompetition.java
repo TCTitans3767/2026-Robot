@@ -10,8 +10,10 @@ import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -54,6 +56,11 @@ public class TurretIOCompetition implements TurretIO{
         turretMotorConfig.CurrentLimits.StatorCurrentLimit = Constants.Shooter.Turret.currentLimit;
         turretMotorConfig.Feedback.SensorToMechanismRatio = Constants.Shooter.Turret.gearRatio;
 
+        turretMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        turretMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.Shooter.Turret.rightLimit;
+        turretMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        turretMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.Shooter.Turret.leftLimit;
+
         motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Shooter.Turret.motionMagicCruise;
         motionMagicConfigs.MotionMagicAcceleration = Constants.Shooter.Turret.motionMagicAccel;
 
@@ -82,8 +89,10 @@ public class TurretIOCompetition implements TurretIO{
             case POSITION -> turretMotor.setControl(new MotionMagicExpoVoltage(this.targetRotation).withFeedForward(calculateAdditionalFeedforward()));
         }
 
+        BaseStatusSignal.refreshAll(rotationStatusSignal, amperageStatusSignal, torqueStatusSignal, velocityStatusSignal);
+
         inputs.targetRotation = this.targetRotation;
-        inputs.currentRotation = Units.rotationsToDegrees(rotationStatusSignal.getValueAsDouble());
+        inputs.currentRotation = rotationStatusSignal.getValueAsDouble();
         inputs.currentAmperage = amperageStatusSignal.getValueAsDouble();
         inputs.currentTorque = torqueStatusSignal.getValueAsDouble();
         inputs.currentVelocity = velocityStatusSignal.getValueAsDouble();
@@ -92,7 +101,7 @@ public class TurretIOCompetition implements TurretIO{
     @Override
     public void setRotation(double targetRotation) {
         this.controlMode = ControlMode.POSITION;
-        this.targetRotation = Units.radiansToRotations(targetRotation);
+        this.targetRotation = MathUtil.clamp(targetRotation, Constants.Shooter.Turret.leftLimit + 0.005, Constants.Shooter.Turret.rightLimit - 0.005);
     }
 
     @Override
@@ -151,6 +160,25 @@ public class TurretIOCompetition implements TurretIO{
     }
 
     private double calculateAdditionalFeedforward() {
-        return Constants.Shooter.turretSpringFeedforwardInterpolationMap.get(this.targetRotation);
+//        if (targetRotation < 0.5 || targetRotation > 0.65) {
+//            return Constants.Shooter.turretSpringFeedforwardInterpolationMap.get(this.targetRotation);
+//        }
+
+//        if  (targetRotation > 0.65) {
+//            if (targetRotation > turretMotor.getPosition().getValueAsDouble()) {
+//                return Constants.Shooter.turretSpringFeedforwardInterpolationMap.get(targetRotation);
+//            }
+//        } else if (targetRotation < 0.5) {
+//            if (targetRotation > turretMotor.getPosition().getValueAsDouble()) {
+//                return Constants.Shooter.turretSpringFeedforwardInterpolationMap.get(targetRotation);
+//            }
+//        }
+
+
+        if (this.targetRotation < turretMotor.getPosition().getValueAsDouble()) {
+            return -Constants.Shooter.Turret.compG * Math.sin(turretMotor.getPosition().getValueAsDouble() - 0.5);
+        } else {
+            return Constants.Shooter.Turret.compG * Math.sin(turretMotor.getPosition().getValueAsDouble() - 0.5);
+        }
     }
 }

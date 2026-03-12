@@ -22,8 +22,6 @@ public class TeleopDrive extends Command {
                 () -> true
         );
         DrivetrainPublisher.setAcceptInputsSupplier(() -> true);
-
-        addRequirements(Robot.drivetrain);
     }
 
     @Override

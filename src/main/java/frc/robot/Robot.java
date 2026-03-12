@@ -178,17 +178,17 @@ public class Robot extends LoggedRobot {
                       new Feeder("leftFeeder", new FeederIOCompetition(Constants.Shooter.Feeder.leftFeederMotorCANID)),
                       new Pose2d(Units.inchesToMeters(-5.75), Units.inchesToMeters(5.75), new Rotation2d())
               ));
-              shooterArray.addShooter(new ShooterStack(
-                      "RightShooterStack",
-                      new Turret("rightTurret", new TurretIOCompetition(Constants.Shooter.Turret.rightTurretMotorCANID)),
-                      new Hood("rightHood", new HoodIOCompetition(Constants.Shooter.Hood.rightHoodServoHubPort)),
-                      new Flywheel("rightFlywheel", new FlywheelIOCompetition(Constants.Shooter.Flywheel.rightFlywheelMotorCANID)),
-                      new Feeder("rightFeeder", new FeederIOCompetition(Constants.Shooter.Feeder.rightFeederMotorCANID)),
-                      new Pose2d(Units.inchesToMeters(-5.75), Units.inchesToMeters(-5.75), new Rotation2d())
-              ));
+//              shooterArray.addShooter(new ShooterStack(
+//                      "RightShooterStack",
+//                      new Turret("rightTurret", new TurretIOCompetition(Constants.Shooter.Turret.rightTurretMotorCANID)),
+//                      new Hood("rightHood", new HoodIOCompetition(Constants.Shooter.Hood.rightHoodServoHubPort)),
+//                      new Flywheel("rightFlywheel", new FlywheelIOCompetition(Constants.Shooter.Flywheel.rightFlywheelMotorCANID)),
+//                      new Feeder("rightFeeder", new FeederIOCompetition(Constants.Shooter.Feeder.rightFeederMotorCANID)),
+//                      new Pose2d(Units.inchesToMeters(-5.75), Units.inchesToMeters(-5.75), new Rotation2d())
+//              ));
               indexer = new Indexer(new IndexerIOCompetition());
               intake = new Intake(new IntakeIOCompetition());
-              shooterLimelight = new LimelightCamera("limelight-turret", new Pose3d(Units.inchesToMeters(-12.140), Units.inchesToMeters(12.745), Units.inchesToMeters(19.296), new Rotation3d(0, 0, Units.degreesToRadians(-145))), LimelightCamera.limelightPipeline.APRIL_TAG);
+              shooterLimelight = new LimelightCamera("limelight-turret", new Pose3d(Units.inchesToMeters(-12.140), Units.inchesToMeters(12.745), Units.inchesToMeters(19.296), new Rotation3d(0, 0, Units.degreesToRadians(-128))), LimelightCamera.limelightPipeline.APRIL_TAG);
 //              swerveLimelight = new LimelightCamera("limelight-swerve", new Pose3d(Units.inchesToMeters(6.833), Units.inchesToMeters(11.255), Units.inchesToMeters(8.691), new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-35))), LimelightCamera.limelightPipeline.APRIL_TAG);
               break;
 
@@ -302,6 +302,10 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DrivetrainPublisher.setAcceptInputsSupplier(() -> false);
+    shooterLimelight.disableEstimation();
+//    swerveLimelight.disableEstimation();
+
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -309,7 +313,6 @@ public class Robot extends LoggedRobot {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
 
-    DrivetrainPublisher.setAcceptInputsSupplier(() -> false);
   }
 
   /** This function is called periodically during autonomous. */
@@ -328,6 +331,8 @@ public class Robot extends LoggedRobot {
     }
 
     DrivetrainPublisher.setAcceptInputsSupplier(() -> true);
+//    swerveLimelight.enableEstimation();
+    shooterLimelight.enableEstimation();
   }
 
   /** This function is called periodically during operator control. */

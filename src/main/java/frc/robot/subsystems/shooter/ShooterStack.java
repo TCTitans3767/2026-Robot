@@ -56,16 +56,17 @@ public class ShooterStack {
 
     public void periodic() {
         currentShooterPosition = drivetrain.getPose().plus(new Transform2d(robotRelativeOffset.getTranslation(), robotRelativeOffset.getRotation()));
-        Logger.recordOutput(name+" Turret Position", new Pose2d(currentShooterPosition.getX(), currentShooterPosition.getY(), Rotation2d.fromRadians(turret.getRotationFieldCoordinates())));
+        Logger.recordOutput(name+" Turret Position", new Pose2d(currentShooterPosition.getX(), currentShooterPosition.getY(), Rotation2d.fromDegrees(turret.getRotationFieldCoordinates())));
         distanceToTarget = currentShooterPosition.getTranslation().getDistance(shotTarget);
         Logger.recordOutput(name + " Distance To Target", distanceToTarget);
         double targetTurretRotation = calculateTurretRotation();
         double angleToTarget = targetTurretRotation - drivetrain.getRotation().getRadians();
         Logger.recordOutput(name + "shooting enabled", this.shootingEnabled);
+        Logger.recordOutput(name + " Target Turret Rotation",  Units.radiansToRotations(targetTurretRotation));
 
 
         if (pointToTarget) {
-            turret.setRotation(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget));
+            turret.setRotation(Units.radiansToRotations(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget)));
         }
         if (shootingEnabled) {
             hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
@@ -75,7 +76,6 @@ public class ShooterStack {
 
         if (shootingEnabled) {
 //            System.out.println("shooting enabled");
-            flywheel.setVelocity(62);
             flywheel.setVelocity(
                     flywheelMap.get(distanceToTarget) != null ?
                     flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection((angleToTarget)))
@@ -93,10 +93,13 @@ public class ShooterStack {
 
 
         if (!(flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) || !shootingEnabled) {
+            Logger.recordOutput(name + " Flywheel velocity greater than target velocity", false);
             feeder.setFeedVelocity(-10);
         } else if ((flywheel.getVelocity() >= flywheel.getTargetVelocity() - 10) && shootingEnabled) {
+            Logger.recordOutput(name + " Flywheel velocity greater than target velocity", true);
             feeder.setFeedVelocity(35);
         } else {
+            Logger.recordOutput(name + " Flywheel velocity greater than target velocity", false);
             feeder.setFeedVelocity(-10);
         }
 
@@ -125,10 +128,14 @@ public class ShooterStack {
     }
 
     private double calculateTurretRotation() {
-        return drivetrain.getRotation().getRadians() + Math.atan2(
+        double unfilteredValue = drivetrain.getRotation().getRadians() - Math.atan2(
                 shotTarget.getY() - currentShooterPosition.getY(),
-                shotTarget.getX() - currentShooterPosition.getX()
-                );
+                shotTarget.getX() - currentShooterPosition.getX());
+        if (unfilteredValue < 0) {
+            return unfilteredValue + (Math.PI * 2);
+        } else {
+            return unfilteredValue;
+        }
 //        drivetrain.getRotation().getRadians() -
     }
 

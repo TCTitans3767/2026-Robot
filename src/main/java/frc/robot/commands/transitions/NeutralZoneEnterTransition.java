@@ -16,4 +16,9 @@ public class NeutralZoneEnterTransition extends SequentialCommandGroup {
                 new SetMode(RobotStates.neutralZoneState)
         );
     }
+
+    @Override
+    public boolean runsWhenDisabled() {
+        return true;
+    }
 }

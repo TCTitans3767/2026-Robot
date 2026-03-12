@@ -25,7 +25,7 @@ public class HomeTurretCommand extends Command {
     @Override
     public void initialize() {
         previousEncoderReading = turret.getRotation();
-        turret.setPower(-0.2);
+        turret.setPower(-0.25);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class HomeTurretCommand extends Command {
         } else {
             System.out.println("Something went wrong and the the homing sequence for {" + turret.name + "} quit unexpectedly");
         }
-        turret.setPower(-0.005);
+//        turret.setPower(-0.005);
     }
 
     @Override

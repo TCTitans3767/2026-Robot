@@ -1,6 +1,7 @@
 package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
@@ -17,6 +18,27 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class LimelightCamera extends SubsystemBase implements LimelightCameraIO {
+
+    public void resetInternalGyro(Pose2d pose) {
+        camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu).save();
+
+        this.currentIMUMode = LimelightSettings.ImuMode.SyncInternalImu;
+
+        Orientation3d robotOrientation = new Orientation3d(
+                new Rotation3d(pose.getRotation()),
+                new AngularVelocity3d(Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0))
+        );
+
+        camera.getSettings().withRobotOrientation(robotOrientation).save();
+
+    }
+
+    public void disableEstimation() {
+        this.doEstimation = false;
+    }
+    public void enableEstimation() {
+        this.doEstimation = true;
+    }
 
     public enum limelightPipeline {
         APRIL_TAG,
@@ -36,6 +58,7 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
     private boolean isMostRecentPoseEstimateValid = false;
     private double mostRecentAmbiguity = 0;
     private ArrayList<Integer> currentVisibleTags;
+    private boolean doEstimation = true;
 
     private final String limelightName;
     private final Pose3d robotToLimelight;
@@ -73,7 +96,9 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
         Logger.processInputs(this.limelightName, inputs);
         switch (this.currentPipeline) {
             case APRIL_TAG -> {
-                aprilTagPeriodic();
+                if (doEstimation) {
+                    aprilTagPeriodic();
+                }
             }
             case OBJECT_DETECTION -> {
                 objectDetectionPeriodic();

@@ -119,7 +119,7 @@ public class Drivetrain extends SubsystemBase {
     private SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    private Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(3, 3, 3);
+    private Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.3, 0.3, 67676767);
 
     private final Field2d field = new Field2d();
 
@@ -451,6 +451,8 @@ public class Drivetrain extends SubsystemBase {
     /** Resets the current odometry pose. */
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+//        Robot.shooterLimelight.resetInternalGyro(pose);
+//        Robot.swerveLimelight.resetInternalGyro(pose);
     }
 
     /** Adds a new timestamped vision measurement. */

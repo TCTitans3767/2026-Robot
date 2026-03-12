@@ -2,6 +2,7 @@ package frc.robot.commands.states;
 
 import ControlAnnotations.State;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
@@ -27,27 +28,30 @@ public class OnSideState extends Command {
 //        Robot.indexer.setIndexVelocity(15);
 //        Robot.intake.setPivotPosition(0);
 //        Robot.intake.setRollerVelocitySupplier(() -> MathUtil.clamp(Math.sqrt(((Robot.drivetrain.getChassisSpeeds().vxMetersPerSecond * Robot.drivetrain.getChassisSpeeds().vxMetersPerSecond) + (Robot.drivetrain.getChassisSpeeds().vyMetersPerSecond * Robot.drivetrain.getChassisSpeeds().vyMetersPerSecond)) / Constants.Intake.rollerRadius) / (2 * Math.PI), 40.0, 100));
+        Robot.shooterArray.setTarget(Robot.getAlliance() == DriverStation.Alliance.Blue ? Constants.FieldPoses.blueHub : Constants.FieldPoses.redHub);
+        Robot.shooterArray.enableTragetPointing();
+        Robot.shooterArray.setInterpolationMaps(Constants.Shooter.hoodAngleInterpolationMap, Constants.Shooter.flywheelVelocityInterpolationMap);
     }
 
     @Override
     public void execute() {
-        if (TriggerBoard.isRobotInNoShootingZone()) {
-            inactive();
-        } else {
-            if (HubState.isActive()) {
-                active();
-            } else {
-                inactive();
-            }
-        }
+//        if (TriggerBoard.isRobotInNoShootingZone()) {
+//            inactive();
+//        } else {
+//            if (HubState.isActive()) {
+//                active();
+//            } else {
+//                inactive();
+//            }
+//        }
 
-        if (HubState.timeRemainingInCurrentShift().orElse(Seconds.of(Constants.shiftOffset + 1)).in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
-            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
-            return;
-        } else if (HubState.timeRemainingInCurrentShift().orElse(Seconds.of(Constants.shiftOffset + 1)).in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
-            RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
-            return;
-        }
+//        if (HubState.timeRemainingInCurrentShift().orElse(Seconds.of(Constants.shiftOffset + 1)).in(Seconds) <= Constants.shiftOffset && !HubState.isActiveNext()) {
+//            RobotControl.setCurrentMode(RobotTransitions.hubInactiveTransition);
+//            return;
+//        } else if (HubState.timeRemainingInCurrentShift().orElse(Seconds.of(Constants.shiftOffset + 1)).in(Seconds) <= Constants.shiftOffset && HubState.isActiveNext()) {
+//            RobotControl.setCurrentMode(RobotTransitions.hubActiveTransition);
+//            return;
+//        }
 
         if (TriggerBoard.isInNeutralZone()) {
             RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
@@ -74,6 +78,26 @@ public class OnSideState extends Command {
 //        System.out.println("Ran Active function from OnSideState");
 //        active();
 //        System.out.println("Ran execute from OnSideState");
+
+        if (TriggerBoard.isShootButtonPressed()) {
+            Robot.shooterArray.enableShooting(true);
+            Robot.intake.setRollerVelocity(20);
+            Robot.indexer.setIndexVelocity(30);
+        } else {
+            Robot.shooterArray.enableShooting(false);
+            Robot.indexer.setIndexVelocity(0);
+        }
+
+        if (TriggerBoard.isIntakeButtonPressed()) {
+            Robot.intake.setPivotPosition(0);
+            Robot.intake.setRollerVelocity(40);
+        } else {
+            Robot.intake.setPivotPosition(0.15);
+        }
+
+        if (!TriggerBoard.isShootButtonPressed() && !TriggerBoard.isIntakeButtonPressed()) {
+            Robot.intake.setRollerSpeed(0);
+        }
     }
 
     public void active() {
@@ -86,5 +110,10 @@ public class OnSideState extends Command {
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public boolean runsWhenDisabled() {
+        return true;
     }
 }

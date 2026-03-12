@@ -81,8 +81,8 @@ public final class Constants {
   }
 
   public static class Limelights {
-      public static final int minMegaTagOneEstimations = 30;
-      public static final double maxAmbiguity = 0.3;
+      public static final int minMegaTagOneEstimations = 20;
+      public static final double maxAmbiguity = 0.2;
   }
 
   public static class Shooter {
@@ -104,7 +104,20 @@ public final class Constants {
         simFlywheelVelocityInterpolationMap.put(3.0, 48.0);
         simFlywheelVelocityInterpolationMap.put(4.5, 50.0);
 
-        turretSpringFeedforwardInterpolationMap.put(0.0, 3.0);
+        flywheelVelocityInterpolationMap.put(1.8, 67.0);
+        flywheelVelocityInterpolationMap.put(2.57, 66.0);
+        flywheelVelocityInterpolationMap.put(3.0, 69.0);
+        flywheelVelocityInterpolationMap.put(3.45, 71.0);
+        flywheelVelocityInterpolationMap.put(4.7, 80.0);
+
+        hoodAngleInterpolationMap.put(1.8, 1100.0);
+        hoodAngleInterpolationMap.put(2.57, 1150.0);
+        hoodAngleInterpolationMap.put(3.45, 1170.0);
+        flywheelVelocityInterpolationMap.put(4.7, 1200.0);
+
+        turretSpringFeedforwardInterpolationMap.put(0.0, 0.1);
+        turretSpringFeedforwardInterpolationMap.put(0.5, 0.0);
+        turretSpringFeedforwardInterpolationMap.put(0.9, 0.2);
       }
 
       // meters
@@ -122,7 +135,7 @@ public final class Constants {
           public static double motionMagicCruise = 100;
           public static double motionMagicAccel = 50;
 
-          public static final double compP = 0;
+          public static final double compP = 14;
           public static final double compI = 0;
           public static final double compD = 0;
           public static final double compS = 0;
@@ -140,6 +153,7 @@ public final class Constants {
 
           public static final int leftTurretMotorCANID = 43;
           public static final int rightTurretMotorCANID = 42;
+          public static double compG = 0.8;
       }
       public static class Hood {
           public static final double simP = 0.5;
