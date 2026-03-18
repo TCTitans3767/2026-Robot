@@ -113,7 +113,7 @@ public final class Constants {
         hoodAngleInterpolationMap.put(1.8, 1100.0);
         hoodAngleInterpolationMap.put(2.57, 1150.0);
         hoodAngleInterpolationMap.put(3.45, 1170.0);
-        flywheelVelocityInterpolationMap.put(4.7, 1200.0);
+        hoodAngleInterpolationMap.put(4.7, 1200.0);
 
         turretSpringFeedforwardInterpolationMap.put(0.0, 0.1);
         turretSpringFeedforwardInterpolationMap.put(0.5, 0.0);
@@ -181,8 +181,8 @@ public final class Constants {
           public static final double compS = 6;
           public static final double compV = 0.1;
 
-          public static final double gearRatio = 0.75;
-          public static double currentLimit = 60;
+          public static final double gearRatio = 1.1111;
+          public static double currentLimit = 70;
 
           public static final int leftFlywheelMotorCANID = 19;
           public static final int rightFlywheelMotorCANID = 18;

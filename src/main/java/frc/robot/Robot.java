@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.PanicCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.indexer.Indexer;
@@ -90,6 +91,8 @@ public class Robot extends LoggedRobot {
   public static Intake intake;
   public static LimelightCamera shooterLimelight;
   public static LimelightCamera swerveLimelight;
+  public static LimelightCamera rightHopperLimelight;
+  public static LimelightCamera leftHopperLimelight;
 
   public static GenericNTButton hubStateButton = new GenericNTButton("Hub State", NetworkTableInstance.getDefault().getTable("Hub State"), true);
 
@@ -188,8 +191,10 @@ public class Robot extends LoggedRobot {
 //              ));
               indexer = new Indexer(new IndexerIOCompetition());
               intake = new Intake(new IntakeIOCompetition());
-              shooterLimelight = new LimelightCamera("limelight-turret", new Pose3d(Units.inchesToMeters(-12.140), Units.inchesToMeters(12.745), Units.inchesToMeters(19.296), new Rotation3d(0, 0, Units.degreesToRadians(-128))), LimelightCamera.limelightPipeline.APRIL_TAG);
+//              shooterLimelight = new LimelightCamera("limelight-turret", new Pose3d(Units.inchesToMeters(-12.140), Units.inchesToMeters(12.745), Units.inchesToMeters(19.296), new Rotation3d(0, 0, Units.degreesToRadians(-128))), LimelightCamera.limelightPipeline.APRIL_TAG);
 //              swerveLimelight = new LimelightCamera("limelight-swerve", new Pose3d(Units.inchesToMeters(6.833), Units.inchesToMeters(11.255), Units.inchesToMeters(8.691), new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-35))), LimelightCamera.limelightPipeline.APRIL_TAG);
+              rightHopperLimelight = new LimelightCamera("limelight-right-hoppper", new Pose3d(Units.inchesToMeters(-1.072), Units.inchesToMeters(13.386), Units.inchesToMeters(18.796), new Rotation3d(0, 0, Units.degreesToRadians(90))), LimelightCamera.limelightPipeline.APRIL_TAG);
+//              leftHopperLimelight = new LimelightCamera("limelight-left-hoppper", new Pose3d(Units.inchesToMeters(-1.072), Units.inchesToMeters(-13.386), Units.inchesToMeters(18.796), new Rotation3d(0, 0, Units.degreesToRadians(-90))), LimelightCamera.limelightPipeline.APRIL_TAG);
               break;
 
           case SIM:
@@ -267,6 +272,7 @@ public class Robot extends LoggedRobot {
       RobotTransitions.initTransitions();
       DriveModes.initDriveModes();
 
+      RobotControl.setPanicCommand(new PanicCommand());
     // initialize default state and drive commands
     RobotControl.setDriveModeCommand(DriveModes.teleopDrive);
     RobotControl.setCurrentMode(RobotTransitions.shooterStacksInit);

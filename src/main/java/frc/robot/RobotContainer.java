@@ -64,6 +64,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
       new Trigger(HubState::isActive).onTrue(new InstantCommand(() -> Robot.hubStateButton.set(true))).onFalse(new InstantCommand(() -> Robot.hubStateButton.set(false)));
+      new Trigger(Robot.driverController::getStartButton).onTrue(new InstantCommand(RobotControl::panic));
   }
 
   private void setUpPathplannerCommands() {

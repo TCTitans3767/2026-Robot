@@ -50,7 +50,7 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
     private final LimelightCameraIOInputsAutoLogged inputs = new LimelightCameraIOInputsAutoLogged();
     private final LimelightCameraIO io;
 
-    private int megaTag1Estimations = 0;
+    private static int megaTag1Estimations = 0;
     private LimelightPoseEstimator megaTagOneEstimator;
     private LimelightPoseEstimator megaTagTwoEstimator;
     private LimelightSettings.ImuMode currentIMUMode;
