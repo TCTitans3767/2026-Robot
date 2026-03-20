@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
@@ -11,7 +12,7 @@ public class PanicCommand extends Command {
     @Override
     public void initialize() {
         Robot.shooterArray.disableTargetPointing();
-        Robot.shooterArray.setInterpolationMaps(null, null);
+        Robot.shooterArray.setInterpolationMaps(new InterpolatingDoubleTreeMap(), new InterpolatingDoubleTreeMap());
     }
 
     @Override

@@ -71,20 +71,21 @@ public class NeutralZoneState extends Command {
             Robot.indexer.setIndexVelocity(30);
         } else {
             Robot.shooterArray.enableShooting(false);
-            Robot.indexer.setIndexVelocity(0);
         }
 
         // Intaking mode
         if (TriggerBoard.isIntakeButtonPressed()) {
-            Robot.intake.setPivotPosition(0);
-            Robot.intake.setRollerVelocity(40);
+            Robot.intake.setPivotPosition(-0.2);
+            Robot.intake.setRollerVelocity(50);
+            Robot.indexer.setIndexVelocity(20);
         } else {
-            Robot.intake.setPivotPosition(0.15);
+//            Robot.intake.setPivotPosition(0.15);
         }
 
         // If neither intaking mode nor shooting mode is active, set intake roller speed to 0
         if (!TriggerBoard.isShootButtonPressed() && !TriggerBoard.isIntakeButtonPressed()) {
             Robot.intake.setRollerSpeed(0);
+            Robot.indexer.setIndexSpeed(0);
         }
 
 //        if (TriggerBoard.isOffSide()) {

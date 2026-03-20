@@ -78,6 +78,11 @@ public class OnSideState extends Command {
 //        System.out.println("Ran Active function from OnSideState");
 //        active();
 //        System.out.println("Ran execute from OnSideState");
+        if (TriggerBoard.isSpitButtonPressed()) {
+            Robot.intake.setRollerVelocity(-50);
+            Robot.indexer.setIndexVelocity(-20);
+            return;
+        }
 
         if (TriggerBoard.isShootButtonPressed()) {
             Robot.shooterArray.enableShooting(true);
@@ -85,18 +90,19 @@ public class OnSideState extends Command {
             Robot.indexer.setIndexVelocity(30);
         } else {
             Robot.shooterArray.enableShooting(false);
-            Robot.indexer.setIndexVelocity(0);
         }
 
         if (TriggerBoard.isIntakeButtonPressed()) {
-            Robot.intake.setPivotPosition(0);
-            Robot.intake.setRollerVelocity(40);
+            Robot.intake.setPivotPosition(-0.2);
+            Robot.intake.setRollerVelocity(50);
+            Robot.indexer.setIndexVelocity(20);
         } else {
-            Robot.intake.setPivotPosition(0.15);
+//            Robot.intake.setPivotPosition(0.15);
         }
 
         if (!TriggerBoard.isShootButtonPressed() && !TriggerBoard.isIntakeButtonPressed()) {
             Robot.intake.setRollerSpeed(0);
+            Robot.indexer.setIndexSpeed(0);
         }
     }
 

@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import limelight.Limelight;
 import limelight.networktables.*;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class LimelightCamera extends SubsystemBase implements LimelightCameraIO {
 
     public void resetInternalGyro(Pose2d pose) {
-        camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu).save();
+        this.camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu).save();
 
         this.currentIMUMode = LimelightSettings.ImuMode.SyncInternalImu;
 
@@ -71,14 +72,14 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
         this.robotToLimelight = robotToLimelight;
         this.currentPipeline = initialPipeline;
 
-        camera = new Limelight(limelightName);
+        this.camera = new Limelight(limelightName);
 
-        camera.getSettings().withLimelightLEDMode(LimelightSettings.LEDMode.PipelineControl)
+        this.camera.getSettings().withLimelightLEDMode(LimelightSettings.LEDMode.PipelineControl)
                 .withCameraOffset(robotToLimelight)
                 .save();
 
-        megaTagOneEstimator = camera.createPoseEstimator(LimelightPoseEstimator.EstimationMode.MEGATAG1);
-        megaTagTwoEstimator = camera.createPoseEstimator(LimelightPoseEstimator.EstimationMode.MEGATAG2);
+        this.megaTagOneEstimator = this.camera.createPoseEstimator(LimelightPoseEstimator.EstimationMode.MEGATAG1);
+        this.megaTagTwoEstimator = this.camera.createPoseEstimator(LimelightPoseEstimator.EstimationMode.MEGATAG2);
 
         this.io = this;
     }
@@ -88,15 +89,17 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
         inputs.isMostRecentEstimateValid = this.isMostRecentPoseEstimateValid;
         inputs.mostRecentPoseEstimate = this.mostRecentPoseEstimate;
         inputs.mostRecentAmbiguity = this.mostRecentAmbiguity;
+        inputs.currentPipeline = this.currentPipeline.toString();
     }
 
     @Override
     public void periodic() {
-        updateInputs(inputs);
-        Logger.processInputs(this.limelightName, inputs);
+        this.updateInputs(this.inputs);
+        Logger.processInputs(this.limelightName, this.inputs);
+//        System.out.println(this.limelightName + " doEstimation: " + this.doEstimation);
         switch (this.currentPipeline) {
             case APRIL_TAG -> {
-                if (doEstimation) {
+                if (this.doEstimation) {
                     aprilTagPeriodic();
                 }
             }
@@ -120,9 +123,10 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
     }
 
     private void aprilTagPeriodic() {
+//        System.out.println(this.limelightName + "APRIL TAG PERIODIC");
         if (megaTag1Estimations < Constants.Limelights.minMegaTagOneEstimations) {
             if (this.currentIMUMode != LimelightSettings.ImuMode.SyncInternalImu) {
-                camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu);
+                this.camera.getSettings().withImuMode(LimelightSettings.ImuMode.SyncInternalImu);
                 this.currentIMUMode =  LimelightSettings.ImuMode.SyncInternalImu;
             }
 
@@ -131,25 +135,77 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
                     new AngularVelocity3d(Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0))
             );
 
-            camera.getSettings().withRobotOrientation(robotOrientation).save();
+            this.camera.getSettings().withRobotOrientation(robotOrientation).save();
 
-            Optional<PoseEstimate> poseEstimate = megaTagOneEstimator.getPoseEstimate();
+            LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(this.limelightName);
 
-            poseEstimate.ifPresent((estimate) -> {
-                this.mostRecentPoseEstimate = estimate.pose;
-                this.mostRecentAmbiguity = estimate.getAvgTagAmbiguity();
-                if (!(estimate.getAvgTagAmbiguity() > Constants.Limelights.maxAmbiguity)) {
-                    Robot.drivetrain.addVisionMeasurement(estimate.pose.toPose2d(), Timer.getFPGATimestamp(), VecBuilder.fill(0, 0, 0));
-                    megaTag1Estimations++;
-                    this.isMostRecentPoseEstimateValid = true;
-                } else {
+            if (poseEstimate != null) {
+//                System.out.println(this.limelightName + " tagCount: " + poseEstimate.tagCount);
+                if (poseEstimate.tagCount < 2) {
                     this.isMostRecentPoseEstimateValid = false;
+                    return;
+                } else {
+                    for (LimelightHelpers.RawFiducial tag : poseEstimate.rawFiducials) {
+                        if (tag.ambiguity > 0.5) {
+                            this.isMostRecentPoseEstimateValid = false;
+                            return;
+                        }
+                    }
+                    this.isMostRecentPoseEstimateValid = true;
+                    Robot.drivetrain.addVisionMeasurement(poseEstimate.pose, Timer.getFPGATimestamp(), VecBuilder.fill(0, 0, 0));
+                    this.mostRecentPoseEstimate = new Pose3d(poseEstimate.pose);
+                    megaTag1Estimations++;
                 }
-            });
+            }
+//
+//            Optional<PoseEstimate> poseEstimate = LimelightPoseEstimator.BotPose.BLUE.get(this.camera);
+//
+//            poseEstimate.ifPresent((estimate) -> {
+////                System.out.println(this.limelightName + " estimate present");
+//                System.out.println(this.limelightName + " tagCount: " + estimate.tagCount);
+//                if (estimate.tagCount == 0) {
+//                    return;
+//                }
+//                this.mostRecentPoseEstimate = estimate.pose;
+//                this.mostRecentAmbiguity = estimate.getMinTagAmbiguity();
+//                if (!(estimate.getMinTagAmbiguity() > Constants.Limelights.maxAmbiguity)) {
+//                    Robot.drivetrain.addVisionMeasurement(estimate.pose.toPose2d(), Timer.getFPGATimestamp(), VecBuilder.fill(0, 0, 0));
+//                    megaTag1Estimations++;
+//                    this.isMostRecentPoseEstimateValid = true;
+//                } else {
+//                    this.isMostRecentPoseEstimateValid = false;
+//                }
+//            });
         } else {
             if (this.currentIMUMode != LimelightSettings.ImuMode.InternalImu) {
-                camera.getSettings().withImuMode(LimelightSettings.ImuMode.InternalImu);
+                Orientation3d robotOrientation = new Orientation3d(
+                        new Rotation3d(Robot.drivetrain.getRotation()),
+                        new AngularVelocity3d(Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0))
+                );
+
+                this.camera.getSettings().withRobotOrientation(robotOrientation).save();
+                this.camera.getSettings().withImuMode(LimelightSettings.ImuMode.InternalImu);
                 this.currentIMUMode = LimelightSettings.ImuMode.InternalImu;
+            }
+
+            LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(this.limelightName);
+
+            if (poseEstimate != null) {
+//                System.out.println(this.limelightName + " tagCount: " + poseEstimate.tagCount);
+                if (poseEstimate.tagCount < 2) {
+                    this.isMostRecentPoseEstimateValid = false;
+                    return;
+                } else {
+                    for (LimelightHelpers.RawFiducial tag : poseEstimate.rawFiducials) {
+                        if (tag.ambiguity > 0.3) {
+                            this.isMostRecentPoseEstimateValid = false;
+                            return;
+                        }
+                    }
+                    this.isMostRecentPoseEstimateValid = true;
+                    Robot.drivetrain.addVisionMeasurement(poseEstimate.pose, Timer.getFPGATimestamp(), VecBuilder.fill(0, 0, 0));
+                    this.mostRecentPoseEstimate = new Pose3d(poseEstimate.pose);
+                }
             }
 
 //            Orientation3d robotOrientation = new Orientation3d(
@@ -161,21 +217,29 @@ public class LimelightCamera extends SubsystemBase implements LimelightCameraIO 
 //
 //            camera.getSettings().withRobotOrientation(robotOrientation).save();
 
-            Optional<PoseEstimate> poseEstimate = LimelightPoseEstimator.BotPose.BLUE_MEGATAG2.get(this.camera);
-
-            poseEstimate.ifPresent((estimate) -> {
-                this.mostRecentPoseEstimate = estimate.pose;
-                if (!(estimate.getMaxTagAmbiguity() > Constants.Limelights.maxAmbiguity)) {
-                    Robot.drivetrain.addVisionMeasurement(estimate.pose.toPose2d());
-                    this.isMostRecentPoseEstimateValid = true;
-                } else {
-                    this.isMostRecentPoseEstimateValid = false;
-                }
-            });
+//            Optional<PoseEstimate> poseEstimate = LimelightPoseEstimator.BotPose.BLUE_MEGATAG2.get(this.camera);
+//
+//            poseEstimate.ifPresent((estimate) -> {
+//                this.mostRecentPoseEstimate = estimate.pose;
+//                this.mostRecentAmbiguity = estimate.getMinTagAmbiguity();
+//                if (estimate.tagCount == 0) {
+//                    return;
+//                }
+//                if (!(estimate.getMinTagAmbiguity() > Constants.Limelights.maxAmbiguity)) {
+//                    Robot.drivetrain.addVisionMeasurement(estimate.pose.toPose2d());
+//                    this.isMostRecentPoseEstimateValid = true;
+//                } else {
+//                    this.isMostRecentPoseEstimateValid = false;
+//                }
+//            });
         }
     }
 
     private void objectDetectionPeriodic() {
 
+    }
+
+    public static void cancelMegaTagOneEstimation() {
+        LimelightCamera.megaTag1Estimations = 50;
     }
 }

@@ -108,7 +108,7 @@ public class IntakeIOCompetition implements IntakeIO{
         pivotMotorAmperage = pivotMotor.getStatorCurrent();
         pivotMotorTorque = pivotMotor.getTorqueCurrent();
 
-        pivotMotor.setPosition(0.37);
+        pivotMotor.setPosition(0.36);
 
         BaseStatusSignal.setUpdateFrequencyForAll(
                 Constants.Intake.FrequencyUpdateRate,

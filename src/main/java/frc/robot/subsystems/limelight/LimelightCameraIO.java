@@ -13,6 +13,7 @@ public interface LimelightCameraIO {
         public boolean isMostRecentEstimateValid = false;
         public double mostRecentAmbiguity = 0;
         public int[] visibleTags;
+        public String currentPipeline;
     }
 
     public default void updateInputs(LimelightCameraIOInputs inputs) {};

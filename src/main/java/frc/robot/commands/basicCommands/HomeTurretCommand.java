@@ -25,7 +25,7 @@ public class HomeTurretCommand extends Command {
     @Override
     public void initialize() {
         previousEncoderReading = turret.getRotation();
-        turret.setPower(-0.25);
+//        turret.setPower(-0.25);
     }
 
     @Override

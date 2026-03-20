@@ -14,6 +14,7 @@ public class TriggerBoard {
 
     private static boolean autonomousIntake = false;
     private static boolean autonomousShoot = false;
+    private static boolean autonomousSpit = false;
 
     public static void setAutonomousIntake(boolean value) {
         autonomousIntake = value;
@@ -21,6 +22,10 @@ public class TriggerBoard {
 
     public static void setAutonomousShoot(boolean value) {
         autonomousShoot = value;
+    }
+
+    public static void setAutonomousSpit(boolean value) {
+        autonomousSpit = value;
     }
 
     public static Command enableIntakeButtonAutonomous() {
@@ -34,6 +39,12 @@ public class TriggerBoard {
     }
     public static Command disableShootingButtonAutonomous() {
         return new InstantCommand(() -> {autonomousShoot = false;});
+    }
+    public static Command enableSpitButtonAutonomous() {
+        return new InstantCommand(() -> {autonomousSpit = true;});
+    }
+    public static Command disableSpitButtonAutonomous() {
+        return new InstantCommand(() -> {autonomousSpit = false;});
     }
 
     public static boolean isInNeutralZone() {
@@ -89,6 +100,14 @@ public class TriggerBoard {
             return autonomousIntake;
         } else {
             return Robot.driverController.getLeftTriggerAxis() > 0.5;
+        }
+    }
+
+    public static boolean isSpitButtonPressed() {
+        if (DriverStation.isDSAttached() && DriverStation.isAutonomousEnabled()) {
+            return autonomousSpit;
+        } else {
+            return Robot.driverController.getLeftBumperButton();
         }
     }
 }

@@ -79,7 +79,7 @@ public class ShooterStack {
             flywheel.setVelocity(
                     flywheelMap.get(distanceToTarget) != null ?
                     flywheelMap.get(distanceToTarget) + Units.radiansToRotations(calculateFlywheelVelocityCorrection((angleToTarget)))
-                    : 0
+                    : 65
             );
         } else {
 //            flywheel.setVelocity(idleVelocity);

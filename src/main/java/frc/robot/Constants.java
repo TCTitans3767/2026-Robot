@@ -83,6 +83,7 @@ public final class Constants {
   public static class Limelights {
       public static final int minMegaTagOneEstimations = 20;
       public static final double maxAmbiguity = 0.2;
+      public static double maxRotationalVelocity = Units.degreesToRadians(180);
   }
 
   public static class Shooter {
@@ -104,11 +105,11 @@ public final class Constants {
         simFlywheelVelocityInterpolationMap.put(3.0, 48.0);
         simFlywheelVelocityInterpolationMap.put(4.5, 50.0);
 
-        flywheelVelocityInterpolationMap.put(1.8, 67.0);
-        flywheelVelocityInterpolationMap.put(2.57, 66.0);
-        flywheelVelocityInterpolationMap.put(3.0, 69.0);
-        flywheelVelocityInterpolationMap.put(3.45, 71.0);
-        flywheelVelocityInterpolationMap.put(4.7, 80.0);
+        flywheelVelocityInterpolationMap.put(1.8, 43.0);
+        flywheelVelocityInterpolationMap.put(2.57, 46.5);
+        flywheelVelocityInterpolationMap.put(3.0, 48.5);
+        flywheelVelocityInterpolationMap.put(3.45, 50.0);
+        flywheelVelocityInterpolationMap.put(4.7, 60.0);
 
         hoodAngleInterpolationMap.put(1.8, 1100.0);
         hoodAngleInterpolationMap.put(2.57, 1150.0);
@@ -124,16 +125,16 @@ public final class Constants {
       public static final double flywheelDiameter = 0.1016;
 
       public static class Turret {
-          public static final double simP = 0.5;
+          public static final double simP = 0.55;
           public static final double simI = 0;
-          public static final double simD = 0.05;
+          public static final double simD = 0.0;
 
           public static final double leftLimit = 0;
           public static final double rightLimit = 0.96575;
           public static double currentLimit = 60;
 
           public static double motionMagicCruise = 100;
-          public static double motionMagicAccel = 50;
+          public static double motionMagicAccel = 10;
 
           public static final double compP = 14;
           public static final double compI = 0;
@@ -217,10 +218,10 @@ public final class Constants {
       public static final double simS = 0.0;
 
       // Competition bot
-      public static final double compP = 15;
+      public static final double compP = 0.9;
       public static final double compI = 0.0;
       public static final double compD = 0.0;
-      public static final double compS = 4;
+      public static final double compS = 1;
 
       public static final int indexerCanID = 25;
 
@@ -234,7 +235,7 @@ public final class Constants {
   }
   public static class Intake{
       public static final int rollerMotorCANID = 50;
-      public static final double RollerCurrentLimit = 40;
+      public static final double RollerCurrentLimit = 60;
       public static final double RollerGearRatio = 0.75;
       public static final double RollerMotionMagicCruise = 100;
       public static final double RollerMotionMagicAccel = 200;

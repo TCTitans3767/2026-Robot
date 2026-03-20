@@ -163,7 +163,7 @@ public class Drivetrain extends SubsystemBase {
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(0.0, 0.0, 0.0), new PIDConstants(0, 0.0, 0.0)),
+                        new PIDConstants(0.1, 0.0, 0.0), new PIDConstants(0, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -291,19 +291,13 @@ public class Drivetrain extends SubsystemBase {
         ChassisSpeeds speeds;
 
         // Convert to field relative speeds & send command
-        if (Robot.getAlliance() == Alliance.Red) {
-            speeds =
-                    new ChassisSpeeds(
-                            linearVelocity.getX() * getMaxLinearSpeedMetersPerSec() * 0.5,
-                            linearVelocity.getY() * getMaxLinearSpeedMetersPerSec() * 0.5,
-                            omega * getMaxAngularSpeedRadPerSec() * 0.5);
-        } else {
-            speeds =
-                    new ChassisSpeeds(
-                            -linearVelocity.getX() * getMaxLinearSpeedMetersPerSec() * 0.5,
-                            -linearVelocity.getY() * getMaxLinearSpeedMetersPerSec() * 0.5,
-                            omega * getMaxAngularSpeedRadPerSec() * 0.5);
-        }
+        speeds =
+            new ChassisSpeeds(
+               -linearVelocity.getX() * getMaxLinearSpeedMetersPerSec() * 0.5,
+               -linearVelocity.getY() * getMaxLinearSpeedMetersPerSec() * 0.5,
+               omega * getMaxAngularSpeedRadPerSec() * 0.5
+            );
+
         boolean isFlipped =
                 DriverStation.getAlliance().isPresent()
                         && DriverStation.getAlliance().get() == Alliance.Red;
