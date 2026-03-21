@@ -154,7 +154,7 @@ public class ShooterStack {
         double xVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vxMetersPerSecond;
         double yVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getChassisSpeeds(), drivetrain.getRotation()).vyMetersPerSecond;
 
-        return -Math.sin(Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) * Constants.Shooter.turretLeadCorrectionConstant;
+        return Math.sin(Math.sqrt((xVelocity * xVelocity) + (yVelocity * yVelocity)) * Math.cos(angleToTarget - Math.atan2(yVelocity, xVelocity))) * Constants.Shooter.turretLeadCorrectionConstant;
     }
 
     public void setTurretAngle(double angle) {

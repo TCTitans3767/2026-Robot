@@ -3,6 +3,7 @@ package frc.robot.commands.states;
 import ControlAnnotations.State;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
@@ -88,6 +89,7 @@ public class OnSideState extends Command {
             Robot.shooterArray.enableShooting(true);
             Robot.intake.setRollerVelocity(20);
             Robot.indexer.setIndexVelocity(30);
+            Robot.intake.setPivotPosition(MathUtil.isNear(0, Timer.getFPGATimestamp() % Constants.Intake.bumpFrequency, Constants.Intake.bumpTimerDeadband) ? Constants.Intake.bottomPosition : Constants.Intake.bumpPosition);
         } else {
             Robot.shooterArray.enableShooting(false);
         }

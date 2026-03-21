@@ -94,7 +94,7 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap turretSpringFeedforwardInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
       public static double signalUpdateFrequency = 20;
-      public static double turretLeadCorrectionConstant = 0.05;
+      public static double turretLeadCorrectionConstant = 0.1;
 
       static {
         simHoodAngleInterpolationMap.put(1.635, Units.degreesToRadians(78));
@@ -131,10 +131,10 @@ public final class Constants {
 
           public static final double leftLimit = 0;
           public static final double rightLimit = 0.96575;
-          public static double currentLimit = 60;
+          public static double currentLimit = 75;
 
-          public static double motionMagicCruise = 100;
-          public static double motionMagicAccel = 10;
+          public static double motionMagicCruise = 20;
+          public static double motionMagicAccel = 5;
 
           public static final double compP = 14;
           public static final double compI = 0;
@@ -259,6 +259,10 @@ public final class Constants {
 
       public static final double FrequencyUpdateRate = 20;
       public static double rollerRadius = Units.inchesToMeters(1);
+      public static double bumpFrequency = 0.5;
+      public static double bumpTimerDeadband = Intake.bumpFrequency / 3;
+      public static double bottomPosition = 0;
+      public static double bumpPosition = 0.1;
   }
 
 }
