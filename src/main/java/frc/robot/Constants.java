@@ -94,7 +94,7 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap turretSpringFeedforwardInterpolationMap = new InterpolatingDoubleTreeMap();
       public static double amperageThreshold = 55;
       public static double signalUpdateFrequency = 20;
-      public static double turretLeadCorrectionConstant = 0.1;
+      public static double turretLeadCorrectionConstant = 1;
 
       static {
         simHoodAngleInterpolationMap.put(1.635, Units.degreesToRadians(78));
@@ -133,8 +133,8 @@ public final class Constants {
           public static final double rightLimit = 0.96575;
           public static double currentLimit = 75;
 
-          public static double motionMagicCruise = 20;
-          public static double motionMagicAccel = 5;
+          public static double motionMagicCruise = 80;
+          public static double motionMagicAccel = 160;
 
           public static final double compP = 14;
           public static final double compI = 0;
@@ -250,7 +250,7 @@ public final class Constants {
       public static final double PivotGearRatio = 11.555;
       public static final double PivotMotionMagicCruise = 100;
       public static final double PivotMotionMagicAccel = 200;
-      public static final double PivotkP = 3.8;
+      public static final double PivotkP = 5.5;
       public static final double PivotkI = 0.0;
       public static final double PivotkD = 0.0;
       public static final double PivotkS = 0.9;

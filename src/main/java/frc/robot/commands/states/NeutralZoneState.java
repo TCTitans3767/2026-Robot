@@ -1,7 +1,9 @@
 package frc.robot.commands.states;
 
 import ControlAnnotations.State;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -69,15 +71,16 @@ public class NeutralZoneState extends Command {
             Robot.shooterArray.enableShooting(true);
             Robot.intake.setRollerVelocity(20);
             Robot.indexer.setIndexVelocity(30);
+            Robot.intake.setPivotPosition(MathUtil.isNear(0, Timer.getFPGATimestamp() % Constants.Intake.bumpFrequency, Constants.Intake.bumpTimerDeadband) ? Constants.Intake.bottomPosition : Constants.Intake.bumpPosition);
         } else {
             Robot.shooterArray.enableShooting(false);
         }
 
         // Intaking mode
         if (TriggerBoard.isIntakeButtonPressed()) {
-            Robot.intake.setPivotPosition(-0.2);
+            Robot.intake.setPivotPosition(-0.4);
             Robot.intake.setRollerVelocity(50);
-            Robot.indexer.setIndexVelocity(20);
+            Robot.indexer.setIndexVelocity(15);
         } else {
 //            Robot.intake.setPivotPosition(0.15);
         }

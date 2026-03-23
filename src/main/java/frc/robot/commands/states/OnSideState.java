@@ -95,9 +95,9 @@ public class OnSideState extends Command {
         }
 
         if (TriggerBoard.isIntakeButtonPressed()) {
-            Robot.intake.setPivotPosition(-0.2);
+            Robot.intake.setPivotPosition(-0.4);
             Robot.intake.setRollerVelocity(50);
-            Robot.indexer.setIndexVelocity(20);
+            Robot.indexer.setIndexVelocity(15);
         } else {
 //            Robot.intake.setPivotPosition(0.15);
         }
