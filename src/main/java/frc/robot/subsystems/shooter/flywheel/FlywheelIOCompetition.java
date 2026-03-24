@@ -9,8 +9,10 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
 
@@ -29,6 +31,8 @@ public class FlywheelIOCompetition implements FlywheelIO{
     private double targetVelocity = 0;
     private double targetPower = 0;
     private ControlMode controlMode = ControlMode.POWER;
+
+    private boolean wasTouchingFuel = false;
 
     private final StatusSignal<AngularVelocity> velocityStatusSignal;
     private final StatusSignal<Current> amperageStatusSignal;
@@ -71,6 +75,13 @@ public class FlywheelIOCompetition implements FlywheelIO{
             case VELOCITY -> flywheelMotor.setControl(new MotionMagicVelocityTorqueCurrentFOC(targetVelocity));
         }
 
+        if (flywheelTouchingFuel() && (!wasTouchingFuel)) {
+            wasTouchingFuel = true;
+        } else if (!flywheelTouchingFuel() && (wasTouchingFuel)) {
+            wasTouchingFuel = false;
+            inputs.fuelShotCount++;
+        }
+
         inputs.targetVelocity = this.targetVelocity;
         inputs.currentVelocityRPS = velocityStatusSignal.getValueAsDouble();
         inputs.currentVelocityRPM = velocityStatusSignal.getValueAsDouble() * 60;
@@ -88,5 +99,9 @@ public class FlywheelIOCompetition implements FlywheelIO{
     public void setPower(double percent) {
         this.controlMode = ControlMode.POWER;
         this.targetPower = percent;
+    }
+
+    private boolean flywheelTouchingFuel() {
+        return amperageStatusSignal.getValueAsDouble() > Constants.Shooter.amperageThreshold;
     }
 }

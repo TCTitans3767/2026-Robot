@@ -11,6 +11,7 @@ public interface FlywheelIO {
         public double currentTorque;
         public double currentAmperage;
         public double currentVelocityRPM;
+        public double fuelShotCount;
     }
 
     public default void updateInputs(FlywheelIOInputs inputs) {};

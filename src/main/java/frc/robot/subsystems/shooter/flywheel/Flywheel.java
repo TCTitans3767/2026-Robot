@@ -23,13 +23,6 @@ public class Flywheel extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs(name, inputs);
-
-        if (flywheelTouchingFuel() && (!wasTouchingFuel)) {
-            wasTouchingFuel = true;
-        } else if (!flywheelTouchingFuel() && (wasTouchingFuel)) {
-            wasTouchingFuel = false;
-            fuelShotNumber++;
-        }
     }
 
     public void setVelocity(double rotationsPerSecond) {
@@ -46,10 +39,6 @@ public class Flywheel extends SubsystemBase {
 
     public double getTargetVelocity() {
         return inputs.targetVelocity;
-    }
-
-    private boolean flywheelTouchingFuel() {
-        return inputs.currentAmperage > Constants.Shooter.amperageThreshold;
     }
 
     public void resetFuelShotNumber() {
