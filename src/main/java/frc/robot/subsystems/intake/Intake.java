@@ -36,6 +36,7 @@ public class Intake extends SubsystemBase {
         io.setPivotPosition(position);
     }
     public void setRollerSpeed(double speed) {
+        runRollerWithSupplier = false;
         io.setRollerSpeed(speed);
     }
     public void setRollerVelocity(double velocity) {

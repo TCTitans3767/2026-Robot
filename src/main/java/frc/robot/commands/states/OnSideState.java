@@ -58,34 +58,20 @@ public class OnSideState extends Command {
             RobotControl.setCurrentMode(RobotTransitions.neutralZoneEnterTransition);
             return;
         }
-//        if (Robot.driverController.getLeftTriggerAxis() > 0.5) {
-//            // Intake mode
-//            Robot.shooterArray.enableShooting(false);
-//            Robot.intake.setRollerVelocity(50);
-//            Robot.indexer.setIndexVelocity(15);
-//            Robot.intake.setPivotPosition(0);
-//        } else if (Robot.driverController.getRightTriggerAxis() > 0.5) {
-//            // Shoot mode
-//            Robot.shooterArray.enableShooting(true);
-//            Robot.intake.setRollerVelocity(50);
-//            Robot.indexer.setIndexVelocity(15);
-//            Robot.intake.setPivotPosition(0.15);
-//        } else {
-//            // Neutral mode
-//            Robot.shooterArray.enableShooting(false);
-//            Robot.intake.setRollerVelocity(0);
-//            Robot.indexer.setIndexVelocity(0);
-//        }
-//        System.out.println("Ran Active function from OnSideState");
-//        active();
-//        System.out.println("Ran execute from OnSideState");
+
         if (TriggerBoard.isSpitButtonPressed()) {
             Robot.intake.setRollerVelocity(-50);
             Robot.indexer.setIndexVelocity(-20);
             return;
         }
 
-        if (TriggerBoard.isShootButtonPressed()) {
+        if (TriggerBoard.isShootButtonPressed() && TriggerBoard.isIntakeButtonPressed()) {
+            Robot.shooterArray.enableShooting(true);
+            Robot.intake.setRollerVelocitySupplier(Robot.drivetrain::getVelocity);
+            Robot.indexer.setIndexVelocity(30);
+        }
+
+        if (TriggerBoard.isShootButtonPressed() && !TriggerBoard.isIntakeButtonPressed()) {
             Robot.shooterArray.enableShooting(true);
             Robot.intake.setRollerVelocity(20);
             Robot.indexer.setIndexVelocity(30);
@@ -94,9 +80,9 @@ public class OnSideState extends Command {
             Robot.shooterArray.enableShooting(false);
         }
 
-        if (TriggerBoard.isIntakeButtonPressed()) {
+        if (TriggerBoard.isIntakeButtonPressed() && !TriggerBoard.isShootButtonPressed()) {
             Robot.intake.setPivotPosition(-0.4);
-            Robot.intake.setRollerVelocity(50);
+            Robot.intake.setRollerVelocitySupplier(Robot.drivetrain::getVelocity);
             Robot.indexer.setIndexVelocity(15);
         } else {
 //            Robot.intake.setPivotPosition(0.15);

@@ -419,6 +419,10 @@ public class Drivetrain extends SubsystemBase {
         return values;
     }
 
+    public double getVelocity() {
+        return Math.sqrt((getChassisSpeeds().vxMetersPerSecond * getChassisSpeeds().vxMetersPerSecond) + (getChassisSpeeds().vyMetersPerSecond * getChassisSpeeds().vyMetersPerSecond));
+    }
+
     /** Returns the average velocity of the modules in rotations/sec (Phoenix native units). */
     public double getFFCharacterizationVelocity() {
         double output = 0.0;
