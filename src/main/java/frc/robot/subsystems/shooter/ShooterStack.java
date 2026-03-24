@@ -33,9 +33,12 @@ public class ShooterStack {
     private boolean shootingEnabled = false;
 
     private Translation2d shotTarget = new Translation2d();
+    private Translation2d baseShotTarget = new Translation2d();
     private double distanceToTarget = 0;
     private InterpolatingDoubleTreeMap hoodMap = new InterpolatingDoubleTreeMap();
     private InterpolatingDoubleTreeMap flywheelMap = new InterpolatingDoubleTreeMap();
+
+    private int fuelShotCount = 0;
 
     private Pose2d currentShooterPosition = new Pose2d();
 
@@ -55,6 +58,7 @@ public class ShooterStack {
     }
 
     public void periodic() {
+        shotTarget = baseShotTarget.plus(new Translation2d(-Robot.drivetrain.getChassisSpeeds().vxMetersPerSecond, -Robot.drivetrain.getChassisSpeeds().vyMetersPerSecond));
         currentShooterPosition = drivetrain.getPose().plus(new Transform2d(robotRelativeOffset.getTranslation(), robotRelativeOffset.getRotation()));
         Logger.recordOutput(name+" Turret Position", new Pose2d(currentShooterPosition.getX(), currentShooterPosition.getY(), Rotation2d.fromDegrees(turret.getRotationFieldCoordinates())));
         distanceToTarget = currentShooterPosition.getTranslation().getDistance(shotTarget);
@@ -64,9 +68,8 @@ public class ShooterStack {
         Logger.recordOutput(name + "shooting enabled", this.shootingEnabled);
         Logger.recordOutput(name + " Target Turret Rotation",  Units.radiansToRotations(targetTurretRotation));
 
-
         if (pointToTarget) {
-            turret.setRotation(Units.radiansToRotations(targetTurretRotation + calculateTurretLeadCorrection(angleToTarget)));
+            turret.setRotation(Units.radiansToRotations(targetTurretRotation));
         }
         if (shootingEnabled) {
             hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
@@ -78,7 +81,7 @@ public class ShooterStack {
 //            System.out.println("shooting enabled");
             flywheel.setVelocity(
                     flywheelMap.get(distanceToTarget) != null ?
-                    flywheelMap.get(distanceToTarget) + (calculateFlywheelVelocityCorrection((angleToTarget)))
+                    flywheelMap.get(distanceToTarget)
                     : 65
             );
         } else {
@@ -115,7 +118,7 @@ public class ShooterStack {
     }
 
     public void setTarget(Translation2d target) {
-        this.shotTarget = target;
+        this.baseShotTarget = target;
     }
 
     public void setInterpolationMaps(InterpolatingDoubleTreeMap hoodMap, InterpolatingDoubleTreeMap flywheelMap) {
