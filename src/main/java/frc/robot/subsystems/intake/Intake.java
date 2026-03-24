@@ -1,6 +1,8 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.shooter.feeder.FeederIO;
 import frc.robot.subsystems.intake.IntakeIO;
 import org.littletonrobotics.junction.Logger;
@@ -22,7 +24,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         if (runRollerWithSupplier) {
-            this.setRollerVelocityWithoutTurningOffSupplier(this.velocitySupplier.getAsDouble());
+            this.setRollerVelocityWithoutTurningOffSupplier(MathUtil.clamp(this.velocitySupplier.getAsDouble(), Constants.Intake.minimumRollerVelocity, Constants.Intake.maximumRollerVelocity));
         }
 
         io.updateInputs(inputs);

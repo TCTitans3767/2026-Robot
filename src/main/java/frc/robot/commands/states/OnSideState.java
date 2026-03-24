@@ -67,7 +67,7 @@ public class OnSideState extends Command {
 
         if (TriggerBoard.isShootButtonPressed() && TriggerBoard.isIntakeButtonPressed()) {
             Robot.shooterArray.enableShooting(true);
-            Robot.intake.setRollerVelocitySupplier(Robot.drivetrain::getVelocity);
+            Robot.intake.setRollerVelocitySupplier(() -> Robot.drivetrain.getVelocity() * Constants.Intake.rollerRadius);
             Robot.indexer.setIndexVelocity(30);
         }
 
@@ -82,7 +82,7 @@ public class OnSideState extends Command {
 
         if (TriggerBoard.isIntakeButtonPressed() && !TriggerBoard.isShootButtonPressed()) {
             Robot.intake.setPivotPosition(-0.4);
-            Robot.intake.setRollerVelocitySupplier(Robot.drivetrain::getVelocity);
+            Robot.intake.setRollerVelocitySupplier(() -> Robot.drivetrain.getVelocity() * Constants.Intake.rollerRadius);
             Robot.indexer.setIndexVelocity(15);
         } else {
 //            Robot.intake.setPivotPosition(0.15);
