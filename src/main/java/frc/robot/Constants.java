@@ -228,8 +228,8 @@ public final class Constants {
       public static final double rollerCurrentLimit = 110;
       public static final double rollerConversionFactor = 1;
 
-      public static final double rollerMaxVelocity = 100;
-      public static final double rollerMaxAcceleration = 200;
+      public static final double rollerMaxVelocity = 5000;
+      public static final double rollerMaxAcceleration = 500;
 
       public static final double statusUpdateFrequency = 20;
   }
@@ -259,10 +259,11 @@ public final class Constants {
 
       public static final double FrequencyUpdateRate = 20;
       public static double rollerRadius = Units.inchesToMeters(1);
-      public static double bumpFrequency = 0.5;
+      public static double bumpFrequency = 0.5
+      ;
       public static double bumpTimerDeadband = Intake.bumpFrequency / 3;
       public static double bottomPosition = 0;
-      public static double bumpPosition = 0.092;
+      public static double bumpPosition = 1;
       /**
        * Rotations Per Second
        */
