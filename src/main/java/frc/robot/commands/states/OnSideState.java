@@ -75,7 +75,7 @@ public class OnSideState extends Command {
             Robot.shooterArray.enableShooting(true);
             Robot.intake.setRollerVelocity(20);
             Robot.indexer.setIndexVelocity(30);
-            Robot.intake.setPivotPosition(Constants.Intake.bumpPosition);
+            Robot.intake.setPivotPosition(MathUtil.isNear(0, Timer.getFPGATimestamp() % Constants.Intake.bumpFrequency, Constants.Intake.bumpTimerDeadband) ? Constants.Intake.bottomPosition : Constants.Intake.bumpPosition);
         } else {
             Robot.shooterArray.enableShooting(false);
         }
