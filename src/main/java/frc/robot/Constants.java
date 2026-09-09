@@ -239,7 +239,7 @@ public final class Constants {
       public static final double RollerGearRatio = 0.75;
       public static final double RollerMotionMagicCruise = 100;
       public static final double RollerMotionMagicAccel = 200;
-      public static final double RollerkP = 0.6;
+      public static final double RollerkP = 1.6;
       public static final double RollerkI = 0.0;
       public static final double RollerkD = 0.0;
       public static final double RollerkS = .6;
@@ -262,7 +262,7 @@ public final class Constants {
       public static double bumpFrequency = 0.5;
       public static double bumpTimerDeadband = Intake.bumpFrequency / 3;
       public static double bottomPosition = 0;
-      public static double bumpPosition = 0.092;
+      public static double bumpPosition = 1;
       /**
        * Rotations Per Second
        */
@@ -270,7 +270,7 @@ public final class Constants {
       /**
        * Rotations Per Second
        */
-      public static double maximumRollerVelocity = 10000.0;
+      public static double maximumRollerVelocity = 15000.0;
   }
 
 }

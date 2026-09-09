@@ -18,6 +18,7 @@ public class BasicAuton extends SequentialCommandGroup {
                     Robot.intake.setRollerSpeed(0.2);
                     Robot.indexer.setIndexSpeed(0.20);
                     Robot.shooterArray.enableShooting(true);
+                    Robot.shooterArray.setHoodAngle(14);
                 })
         );
     }
