@@ -71,10 +71,20 @@ public class ShooterStack {
         if (pointToTarget) {
             turret.setRotation(Units.radiansToRotations(targetTurretRotation));
         }
-        if (shootingEnabled) {
-            hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
-        } else {
+        
+        // Check if robot is in a trench zone
+        boolean isInTrench = isRobotInTrench();
+        Logger.recordOutput(name + " In Trench", isInTrench);
+        
+        // MODIFIED: Hood always tracks distance OR goes to minimum if in trench
+        if (isInTrench) {
+            // In trench: drop hood to minimum position
             hood.setAngle(Constants.Shooter.Hood.minimumPulseWidth);
+            Logger.recordOutput(name + " Hood Mode", "Trench (Min Position)");
+        } else {
+            // Normal operation: hood tracks distance to target
+            hood.setAngle(hoodMap.get(distanceToTarget) != null ? hoodMap.get(distanceToTarget) : 0);
+            Logger.recordOutput(name + " Hood Mode", "Tracking Distance");
         }
 
         if (shootingEnabled) {
@@ -85,8 +95,8 @@ public class ShooterStack {
                     : 65
             );
         } else {
-//            flywheel.setVelocity(idleVelocity);
-            flywheel.setVelocity(0);
+            flywheel.setVelocity(idleVelocity);
+           // flywheel.setVelocity(0);
         }
 
 //        if (turret.getVelocity() > Constants.Shooter.Turret.velocityLimit) {
@@ -115,6 +125,43 @@ public class ShooterStack {
             }
         }
 
+    }
+
+    /**
+     * Checks if the robot is currently in any of the defined trench zones
+     * @return true if robot is in a trench zone, false otherwise
+     */
+    private boolean isRobotInTrench() {
+        Translation2d robotPosition = drivetrain.getPose().getTranslation();
+        
+        // Check against all defined no-shoot zones (trenches)
+        for (var trenchZone : Constants.FieldPoses.noShootZones) {
+            if (isPositionInZone(robotPosition, trenchZone)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if a position is within a rectangular zone defined by two corner points
+     * @param position The position to check
+     * @param zone A list containing two Translation2d points (opposite corners of rectangle)
+     * @return true if position is within the zone, false otherwise
+     */
+    private boolean isPositionInZone(Translation2d position, java.util.List<Translation2d> zone) {
+        if (zone.size() < 2) return false;
+        
+        Translation2d corner1 = zone.get(0);
+        Translation2d corner2 = zone.get(1);
+        
+        double minX = Math.min(corner1.getX(), corner2.getX());
+        double maxX = Math.max(corner1.getX(), corner2.getX());
+        double minY = Math.min(corner1.getY(), corner2.getY());
+        double maxY = Math.max(corner1.getY(), corner2.getY());
+        
+        return position.getX() >= minX && position.getX() <= maxX &&
+               position.getY() >= minY && position.getY() <= maxY;
     }
 
     public void setTarget(Translation2d target) {
